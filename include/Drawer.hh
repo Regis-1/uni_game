@@ -5,6 +5,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "../include/Piece.hh"
+#include "../include/Faction.hh"
 
 class Drawer{
 	private:
@@ -17,6 +18,7 @@ class Drawer{
 		void draw_board(sf::RenderWindow *win);
 		void draw_line(sf::RenderWindow *win, sf::Vector2f p1, sf::Vector2f p2, sf::Color color = sf::Color::White);
 		void draw_piece(sf::RenderWindow *win, Piece *piece);
+		void draw_faction(sf::RenderWindow *win, Faction *f);
 };
 
 #endif

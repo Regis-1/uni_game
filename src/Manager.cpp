@@ -6,15 +6,13 @@ Manager::Manager(int dim_x, int dim_y, std::string title){
 	size.x = dim_x;
 	size.y = dim_y;
 
-	/*for(int i=0; i<NPAWNS/2; i++)
-		pawn[i] = Pawn(Team::blue, sf::Vector2f(i,6));
-	for(int i=0; i<NPAWNS/2; i++)
-		pawn[(NPAWNS/2) + i] = Pawn(Team::yellow, sf::Vector2f(i, 1), true);*/
+	std::cout<<"Starting creating factions..."<<std::endl;
+	player_faction = Faction(Team::blue);
+	opponent_faction = Faction(Team::yellow, true);
+	std::cout<<std::endl;
 }
 
 int Manager::run(){
-	sf::Vector2i mouse_tile;
-
 	std::cout<<"Starting the game..."<<std::endl;
 	
 	//game loop
@@ -24,15 +22,11 @@ int Manager::run(){
 			handle_events(event);
 		}
 
-		mouse_tile = get_mouse_tile(&window);
-
 		window.clear();
 		/* visible part */
 		drawer.draw_board(&window);
-		/*for(int i=0; i<NPAWNS; i++){
-			p_piece = &pawn[i];
-			drawer.draw_piece(&window, p_piece);
-		}*/
+		drawer.draw_faction(&window, &player_faction);
+		drawer.draw_faction(&window, &opponent_faction);
 		/* visible part */
 		window.display();
 	}
@@ -49,6 +43,12 @@ int Manager::close(){
 int Manager::handle_events(sf::Event event){
 	if(event.type == sf::Event::Closed)
 		window.close();
+	if(event.type == sf::Event::KeyPressed){
+		if(event.key.code == sf::Keyboard::Escape)
+			window.close();
+		else if(event.key.code == sf::Keyboard::M)
+			std::cout<<"Move command"<<std::endl;
+	}
 
 	return 0;
 }

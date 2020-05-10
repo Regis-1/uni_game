@@ -6,10 +6,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "../include/Drawer.hh"
-#include "../include/Piece.hh"
-#include "../include/Pawn.hh"
-
-#define NPAWNS 16
+#include "../include/Faction.hh"
 
 class Manager{
 	private:
@@ -19,7 +16,8 @@ class Manager{
 		sf::RenderWindow window;
 		sf::Event event;
 
-		Piece *p_piece = NULL;
+		Faction player_faction;
+		Faction opponent_faction;
 
 		int handle_events(sf::Event event);
 		sf::Vector2i get_mouse_tile(sf::RenderWindow *win);

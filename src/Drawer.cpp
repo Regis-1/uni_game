@@ -13,8 +13,6 @@ Drawer::Drawer(std::string font_file){
 		std::cout<<"Error while loading board texture!"<<std::endl;
 	else
 		std::cout<<"Board texture loaded!"<<std::endl;
-
-	std::cout<<std::endl;
 }
 
 void Drawer::draw_text(sf::RenderWindow *win, float x, float y, std::string content, int size, sf::Color color){
@@ -53,4 +51,31 @@ void Drawer::draw_piece(sf::RenderWindow *win, Piece *piece){
 	}
 	t_sprite.setTexture(tex);
 	win->draw(t_sprite);
+}
+
+void Drawer::draw_faction(sf::RenderWindow *win, Faction *f){
+	Piece *p_piece = NULL;
+	Pawn *pawns = f->get_pawns();
+	Bishop *bishops = f->get_bishops();
+	Knight *knights = f->get_knights();
+	Rook *rooks = f->get_rooks();
+	Queen queen = f->get_queen();
+	King king = f->get_king();
+
+	for(int i=0; i<8; i++){
+		p_piece = pawns + i;
+		draw_piece(win, p_piece);
+	}
+	for(int i=0; i<2; i++){
+		p_piece = bishops + i;
+		draw_piece(win, p_piece);
+		p_piece = knights + i;
+		draw_piece(win, p_piece);
+		p_piece = rooks + i;
+		draw_piece(win, p_piece);
+	}
+	p_piece = &queen;
+	draw_piece(win, p_piece);
+	p_piece = &king;
+	draw_piece(win, p_piece);
 }

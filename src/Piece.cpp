@@ -1,5 +1,9 @@
 #include "../include/Piece.hh"
 
+void Piece::set_id(int x){
+	this->id = x;
+}
+
 sf::Vector2i Piece::get_position(){
 	return position;
 }
