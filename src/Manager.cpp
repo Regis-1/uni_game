@@ -43,11 +43,25 @@ int Manager::close(){
 int Manager::handle_events(sf::Event event){
 	if(event.type == sf::Event::Closed)
 		window.close();
-	if(event.type == sf::Event::KeyPressed){
+	else if(event.type == sf::Event::KeyPressed){
 		if(event.key.code == sf::Keyboard::Escape)
 			window.close();
 		else if(event.key.code == sf::Keyboard::M)
 			std::cout<<"Move command"<<std::endl;
+	}
+	else if(event.type == sf::Event::MouseButtonPressed){
+		if(event.mouseButton.button == sf::Mouse::Left){
+			if(!second_click){
+				sf::Vector2i tile_pos = get_mouse_tile(&window);
+				p_selected = player_faction.get_piece_by_pos(tile_pos);
+				second_click = true;
+			}
+			else{
+				sf::Vector2i tile_dest = get_mouse_tile(&window);
+				p_selected->set_position(tile_dest);
+				second_click = false;
+			}
+		}
 	}
 
 	return 0;

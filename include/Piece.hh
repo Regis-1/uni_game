@@ -23,6 +23,7 @@ class Piece{
 	public:
 		//virtual void move()=0;
 		void set_id(int x);
+		void set_position(sf::Vector2i dest);
 		sf::Vector2i get_position();
 		sf::Sprite get_sprite();
 		sf::Texture get_texture();

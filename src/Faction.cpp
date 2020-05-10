@@ -23,3 +23,39 @@ Faction::Faction(Team t, bool enemy){
 
 	std::cout<<"Whole faction created!"<<std::endl;
 }
+
+Piece* Faction::get_piece_by_pos(sf::Vector2i pos){
+	bool found = false;
+	Piece *p_piece = NULL;
+	for(int i=0; i<8 && !found; i++)
+		if(pawns[i].get_position() == pos){
+			p_piece = pawns + i;
+			found = true;
+			break;
+		}
+
+	for(int i=0; i<2 && !found; i++){
+		if(bishops[i].get_position() == pos && !found){
+			p_piece = bishops + i;
+			found = true;
+			break;
+		}
+		if(knights[i].get_position() == pos && !found){
+			p_piece = knights + i;
+			found = true;
+			break;
+		}
+		if(rooks[i].get_position() == pos && !found){
+			p_piece = rooks + i;
+			found = true;
+			break;
+		}
+	}
+
+	if(queen.get_position() == pos)
+		p_piece = &queen;
+	else if(king.get_position() == pos)
+		p_piece = &king;
+
+	return p_piece;
+}
