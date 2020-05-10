@@ -6,8 +6,10 @@ Manager::Manager(float dim_x, float dim_y, std::string title){
 	size.x = dim_x;
 	size.y = dim_y;
 
-	pawn = Pawn(Team::blue, sf::Vector2f(1,6));
-	p_piece = &pawn;
+	for(int i=0; i<NPAWNS/2; i++)
+		pawn[i] = Pawn(Team::blue, sf::Vector2f(i,6));
+	for(int i=0; i<NPAWNS/2; i++)
+		pawn[(NPAWNS/2) + i] = Pawn(Team::yellow, sf::Vector2f(i, 1), true);
 }
 
 int Manager::run(){
@@ -23,7 +25,10 @@ int Manager::run(){
 		window.clear();
 		/* visible part */
 		drawer.draw_board(&window);
-		drawer.draw_piece(&window, p_piece);
+		for(int i=0; i<NPAWNS; i++){
+			p_piece = &pawn[i];
+			drawer.draw_piece(&window, p_piece);
+		}
 		/* visible part */
 		window.display();
 	}

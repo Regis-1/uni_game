@@ -11,3 +11,7 @@ sf::Sprite Piece::get_sprite(){
 std::string Piece::get_tex_path(){
 	return tex_path;
 }
+
+bool Piece::get_enemy(){
+	return enemy;
+}

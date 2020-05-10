@@ -16,6 +16,7 @@ class Piece{
 		sf::Vector2f position;
 		sf::Sprite piece;
 		Team team;
+		bool enemy;
 		int cost;
 
 	public:
@@ -24,6 +25,7 @@ class Piece{
 		sf::Sprite get_sprite();
 		sf::Texture get_texture();
 		std::string get_tex_path();
+		bool get_enemy();
 };
 
 #endif

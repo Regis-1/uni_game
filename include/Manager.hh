@@ -9,6 +9,8 @@
 #include "../include/Piece.hh"
 #include "../include/Pawn.hh"
 
+#define NPAWNS 16
+
 class Manager{
 	private:
 		Drawer drawer;
@@ -18,7 +20,7 @@ class Manager{
 		sf::Event event;
 
 		Piece *p_piece = NULL;
-		Pawn pawn; 
+		Pawn pawn[NPAWNS]; 
 
 		int handle_events(sf::Event event);
 	public:

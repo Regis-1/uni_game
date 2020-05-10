@@ -46,6 +46,11 @@ void Drawer::draw_piece(sf::RenderWindow *win, Piece *piece){
 	if(!tex.loadFromFile(piece->get_tex_path()))
 		std::cout<<"Error while loading piece texture!"<<std::endl;
 
+	t_sprite.setScale(2.f, 2.f);
+	if(piece->get_enemy()){
+		t_sprite.setOrigin(8*2, 8*2);
+		t_sprite.rotate(180.f);
+	}
 	t_sprite.setTexture(tex);
 	win->draw(t_sprite);
 }
