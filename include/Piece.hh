@@ -13,7 +13,7 @@ enum Team{
 class Piece{
 	protected:
 		std::string tex_path = "res/";
-		sf::Vector2f position;
+		sf::Vector2i position;
 		sf::Sprite piece;
 		Team team;
 		bool enemy;
@@ -21,7 +21,7 @@ class Piece{
 
 	public:
 		//virtual void move()=0;
-		sf::Vector2f get_position();
+		sf::Vector2i get_position();
 		sf::Sprite get_sprite();
 		sf::Texture get_texture();
 		std::string get_tex_path();

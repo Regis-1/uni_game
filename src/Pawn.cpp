@@ -1,6 +1,6 @@
 #include "../include/Pawn.hh"
 
-Pawn::Pawn(Team team, sf::Vector2f pos, bool enemy){
+Pawn::Pawn(Team team, sf::Vector2i pos, bool enemy){
 	this->position = pos;
 	this->team = team;
 	this->enemy = enemy;

@@ -4,8 +4,8 @@
 #include "../include/Manager.hh"
 
 int main(int argc, char *argv[]){
-	const float dim_x = 404.f;
-	const float dim_y = 274.f;
+	const int dim_x = 404;
+	const int dim_y = 274;
 	const std::string title = "knight rider";
 
 	Manager game(dim_x, dim_y, title);

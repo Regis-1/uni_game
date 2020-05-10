@@ -6,7 +6,7 @@
 class Pawn : public Piece{
 	public:
 		Pawn(){}
-		Pawn(Team team, sf::Vector2f pos, bool enemy=false);
+		Pawn(Team team, sf::Vector2i pos, bool enemy=false);
 };
 
 #endif

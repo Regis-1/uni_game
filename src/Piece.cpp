@@ -1,6 +1,6 @@
 #include "../include/Piece.hh"
 
-sf::Vector2f Piece::get_position(){
+sf::Vector2i Piece::get_position(){
 	return position;
 }
 
