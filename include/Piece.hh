@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <cstdlib>
 #include <SFML/Graphics.hpp>
 
 enum Team{
@@ -19,9 +20,9 @@ class Piece{
 		Team team;
 		bool enemy;
 		int cost;
+		bool first_move = true;
 
 	public:
-		//virtual void move()=0;
 		void set_id(int x);
 		void set_position(sf::Vector2i dest);
 		sf::Vector2i get_position();
@@ -29,6 +30,7 @@ class Piece{
 		sf::Texture get_texture();
 		std::string get_tex_path();
 		bool get_enemy();
+		virtual bool check_move(sf::Vector2i dest){return false;}
 };
 
 #endif

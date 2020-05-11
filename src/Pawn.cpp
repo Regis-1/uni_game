@@ -12,3 +12,18 @@ Pawn::Pawn(Team team, sf::Vector2i pos, bool enemy){
 	else
 		this->tex_path = this->tex_path+"pawnY.png";
 }
+
+bool Pawn::check_move(sf::Vector2i dest){
+	sf::Vector2i move_vec = position - dest;
+	if(move_vec.y == 2 && first_move){
+		first_move = false;
+		return true;
+	}
+	else if(move_vec.y == 1){
+		if(first_move)
+			first_move = false;
+		return true;
+	}
+	else
+		return false;
+}

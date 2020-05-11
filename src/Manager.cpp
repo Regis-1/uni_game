@@ -1,7 +1,7 @@
 #include "../include/Manager.hh"
 
 Manager::Manager(int dim_x, int dim_y, std::string title){
-	window.create(sf::VideoMode(dim_x, dim_y), title);
+	window.create(sf::VideoMode(dim_x, dim_y), title, sf::Style::Titlebar | sf::Style::Close);
 	drawer = Drawer("Lazer84.ttf");
 	size.x = dim_x;
 	size.y = dim_y;
@@ -58,7 +58,9 @@ int Manager::handle_events(sf::Event event){
 			}
 			else{
 				sf::Vector2i tile_dest = get_mouse_tile(&window);
-				p_selected->set_position(tile_dest);
+				if(p_selected != NULL)
+					if(p_selected->check_move(tile_dest))
+						p_selected->set_position(tile_dest);
 				second_click = false;
 			}
 		}

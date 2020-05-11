@@ -7,6 +7,7 @@ class Bishop : public Piece{
 	public:
 		Bishop(){}
 		Bishop(Team team, sf::Vector2i pos, bool enemy=false);
+		bool check_move(sf::Vector2i dest);
 };
 
 #endif
