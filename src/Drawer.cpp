@@ -79,3 +79,18 @@ void Drawer::draw_faction(sf::RenderWindow *win, Faction *f){
 	p_piece = &king;
 	draw_piece(win, p_piece);
 }
+
+void Drawer::draw_audioplayer(sf::RenderWindow *win, AudioPlayer *a){
+	Button *p_button = a->get_buttons();
+	sf::Sprite t_sprite;
+	sf::Texture t_tex;
+	for(int i=0; i<4; i++){
+		t_sprite = (p_button+i)->get_sprite();
+		if(!t_tex.loadFromFile((p_button+i)->get_btn_tex_path())){
+			std::cout<<"Error while loading button texture!"<<std::endl;
+		}
+		t_sprite.setTexture(t_tex);
+		t_sprite.setScale(2.f, 2.f);
+		win->draw(t_sprite);
+	}
+}

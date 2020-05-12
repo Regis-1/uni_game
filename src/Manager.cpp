@@ -3,10 +3,10 @@
 Manager::Manager(int dim_x, int dim_y, std::string title){
 	window.create(sf::VideoMode(dim_x, dim_y), title, sf::Style::Titlebar | sf::Style::Close);
 	drawer = Drawer("Lazer84.ttf");
+	audio_player = AudioPlayer(sf::Vector2i(294,250));
 	size.x = dim_x;
 	size.y = dim_y;
 
-	std::cout<<"Starting creating factions..."<<std::endl;
 	player_faction = Faction(Team::blue);
 	opponent_faction = Faction(Team::yellow, true);
 	std::cout<<std::endl;
@@ -25,6 +25,7 @@ int Manager::run(){
 		window.clear();
 		/* visible part */
 		drawer.draw_board(&window);
+		drawer.draw_audioplayer(&window, &audio_player);
 		drawer.draw_faction(&window, &player_faction);
 		drawer.draw_faction(&window, &opponent_faction);
 		/* visible part */
@@ -50,28 +51,19 @@ int Manager::handle_events(sf::Event event){
 			std::cout<<"Move command"<<std::endl;
 	}
 	else if(event.type == sf::Event::MouseButtonPressed){
-		if(event.mouseButton.button == sf::Mouse::Left){
-			if(!second_click){
-				sf::Vector2i tile_pos = get_mouse_tile(&window);
-				p_selected = player_faction.get_piece_by_pos(tile_pos);
-				second_click = true;
-			}
-			else{
-				sf::Vector2i tile_dest = get_mouse_tile(&window);
-				if(p_selected != NULL)
-					if(p_selected->check_move(tile_dest))
-						p_selected->set_position(tile_dest);
-				second_click = false;
-			}
-		}
+		sf::Vector2i mouse_pos = sf::Mouse::getPosition(window);
+		if(mouse_pos.x < 137*2)
+			click_on_board(event);
+		else
+			click_on_menu(event);
 	}
 
 	return 0;
 }
 
-sf::Vector2i Manager::get_mouse_tile(sf::RenderWindow *win){
+sf::Vector2i Manager::get_mouse_tile(){
 	sf::Vector2i tile;
-	sf::Vector2i l_pos = sf::Mouse::getPosition(*win);
+	sf::Vector2i l_pos = sf::Mouse::getPosition(window);
 	bool found = false;
 
 	for(int i=0; i<8; i++){
@@ -90,4 +82,61 @@ sf::Vector2i Manager::get_mouse_tile(sf::RenderWindow *win){
 	}
 	
 	return tile;
+}
+
+void Manager::click_on_board(sf::Event event){
+	if(event.mouseButton.button == sf::Mouse::Left){
+		if(!second_click){
+			sf::Vector2i tile_pos = get_mouse_tile();
+			p_selected = player_faction.get_piece_by_pos(tile_pos);
+			second_click = true;
+		}
+		else{
+			sf::Vector2i tile_dest = get_mouse_tile();
+			if(p_selected != NULL)
+				if(p_selected->check_move(tile_dest))
+					p_selected->set_position(tile_dest);
+			second_click = false;
+		}
+	}
+}
+
+void Manager::click_on_menu(sf::Event event){
+	if(event.mouseButton.button == sf::Mouse::Left){
+		sf::Vector2i mouse_pos = sf::Mouse::getPosition(window);
+		if(mouse_pos.x>294 && mouse_pos.x<294+8*2 &&
+			 mouse_pos.y>250 && mouse_pos.y<250+8*2){
+			if(!active_player){
+				audio_player.play();
+				active_player = true;
+			}
+		}	
+		else if(mouse_pos.x>294+OFFSET*1*2 && mouse_pos.x<294+OFFSET*1*2+8*2 &&
+						mouse_pos.y>250 && mouse_pos.y<250+8*2){
+			if(active_player){
+				audio_player.stop();
+				active_player = false;
+			}
+		}
+		else if(mouse_pos.x>294+OFFSET*2*2 && mouse_pos.x<294+OFFSET*2*2+8*2 &&
+						mouse_pos.y>250 && mouse_pos.y<250+8*2){
+			if(!active_player){
+				audio_player.prev();
+			}
+			else{
+				audio_player.prev_forced();
+				audio_player.play();
+			}
+		}
+		else if(mouse_pos.x>294+OFFSET*3*2 && mouse_pos.x<294+OFFSET*3*2+8*2 &&
+						mouse_pos.y>250 && mouse_pos.y<250+8*2){
+			if(!active_player){
+				audio_player.next();
+			}
+			else{
+				audio_player.next_forced();
+				audio_player.play();
+			}
+		}
+	}
 }

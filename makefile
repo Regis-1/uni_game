@@ -7,7 +7,7 @@ SRCDIR=src
 INCDIR=include
 
 TARGET=knight_rider
-CORES=main Manager Drawer Faction Piece Pawn Rook Bishop Knight Queen King
+CORES=main Manager Drawer Faction Piece Pawn Rook Bishop Knight Queen King Button AudioPlayer
 SRCS=$(patsubst %,$(SRCDIR)/%.cpp,$(CORES))
 OBJS=$(patsubst %,$(OBJDIR)/%.o,$(CORES))
 
