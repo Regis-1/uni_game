@@ -15,13 +15,13 @@ Drawer::Drawer(std::string font_file){
 		std::cout<<"Board texture loaded!"<<std::endl;
 }
 
-void Drawer::draw_text(sf::RenderWindow *win, float x, float y, std::string content, int size, sf::Color color){
+void Drawer::draw_text(sf::RenderWindow *win, sf::Vector2f pos, std::string content, int size, sf::Color color){
 	sf::Text text;
 	text.setFont(font);
 	text.setString(content);
 	text.setCharacterSize(size);
 	text.setFillColor(color);
-	text.setPosition(x,y);
+	text.setPosition(pos.x,pos.y);
 	win->draw(text);
 }
 
@@ -93,4 +93,10 @@ void Drawer::draw_audioplayer(sf::RenderWindow *win, AudioPlayer *a){
 		t_sprite.setScale(2.f, 2.f);
 		win->draw(t_sprite);
 	}
+}
+
+void Drawer::draw_stats(sf::RenderWindow *win, Stats *s){
+	std::string *t_str = s->get_players();
+	draw_text(win, sf::Vector2f(309, 110), t_str[0]);
+	draw_text(win, sf::Vector2f(294, 170), t_str[1]);
 }

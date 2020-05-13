@@ -3,6 +3,7 @@
 Manager::Manager(int dim_x, int dim_y, std::string title){
 	window.create(sf::VideoMode(dim_x, dim_y), title, sf::Style::Titlebar | sf::Style::Close);
 	drawer = Drawer("Lazer84.ttf");
+	stats = Stats();
 	audio_player = AudioPlayer(sf::Vector2i(294,250));
 	size.x = dim_x;
 	size.y = dim_y;
@@ -25,6 +26,7 @@ int Manager::run(){
 		window.clear();
 		/* visible part */
 		drawer.draw_board(&window);
+		drawer.draw_stats(&window, &stats);
 		drawer.draw_audioplayer(&window, &audio_player);
 		drawer.draw_faction(&window, &player_faction);
 		drawer.draw_faction(&window, &opponent_faction);

@@ -7,6 +7,7 @@
 
 #include "../include/Drawer.hh"
 #include "../include/AudioPlayer.hh"
+#include "../include/Stats.hh"
 #include "../include/Faction.hh"
 
 class Manager{
@@ -19,6 +20,7 @@ class Manager{
 		Faction player_faction;
 		Faction opponent_faction;
 
+		Stats stats;
 		AudioPlayer audio_player;
 		bool active_player = false;
 
