@@ -96,7 +96,30 @@ void Drawer::draw_audioplayer(sf::RenderWindow *win, AudioPlayer *a){
 }
 
 void Drawer::draw_stats(sf::RenderWindow *win, Stats *s){
+	sf::Texture t_tex;
+	sf::Sprite t_sprite;
 	std::string *t_str = s->get_players();
+	sf::Vector2f **t_pos = s->get_icons_pos();
+	int **t_counter = s->get_piece_counter();
+	sf::Color *t_color = s->get_counter_colors();
+
 	draw_text(win, sf::Vector2f(309, 110), t_str[0]);
-	draw_text(win, sf::Vector2f(294, 170), t_str[1]);
+	draw_text(win, sf::Vector2f(294, 180), t_str[1]);
+	
+	t_str = s->get_icons_names();
+	for(int i=0; i<2; i++)
+		for(int j=0; j<5; j++){
+			if(i==0){
+				if(!t_tex.loadFromFile("res/"+t_str[j]+"Y.png"))
+					std::cout<<"Error while loading icon texture"<<std::endl;
+			}
+			else{
+				if(!t_tex.loadFromFile("res/"+t_str[j]+"B.png"))
+					std::cout<<"Error while loading icon texture"<<std::endl;
+			}
+			t_sprite.setPosition(t_pos[i][j]);
+			t_sprite.setTexture(t_tex);
+			win->draw(t_sprite);
+			draw_text(win, t_pos[i][j]+sf::Vector2f(4,16), std::to_string(t_counter[i][j]), 12, t_color[j]);
+		}
 }
