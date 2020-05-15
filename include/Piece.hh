@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include <vector>
 #include <SFML/Graphics.hpp>
 
 enum Team{
@@ -25,12 +26,13 @@ class Piece{
 	public:
 		void set_id(int x);
 		void set_position(sf::Vector2i dest);
+		void set_first_move(bool b);
 		sf::Vector2i get_position();
 		sf::Sprite get_sprite();
 		sf::Texture get_texture();
 		std::string get_tex_path();
 		bool get_enemy();
-		virtual bool check_move(sf::Vector2i dest){return false;}
+		virtual std::vector<sf::Vector2i> get_available_moves();
 };
 
 #endif

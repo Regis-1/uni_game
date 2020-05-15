@@ -91,13 +91,19 @@ void Manager::click_on_board(sf::Event event){
 		if(!second_click){
 			sf::Vector2i tile_pos = get_mouse_tile();
 			p_selected = player_faction.get_piece_by_pos(tile_pos);
-			second_click = true;
+			if(p_selected != NULL)
+				second_click = true;
 		}
 		else{
+			std::vector<sf::Vector2i> a_moves;
 			sf::Vector2i tile_dest = get_mouse_tile();
-			if(p_selected != NULL)
-				if(p_selected->check_move(tile_dest))
+			if(p_selected != NULL){
+				a_moves = p_selected->get_available_moves();
+				if(std::find(a_moves.begin(), a_moves.end(), tile_dest) != a_moves.end()){
 					p_selected->set_position(tile_dest);
+					p_selected->set_first_move(false);
+				}
+			}
 			second_click = false;
 		}
 	}

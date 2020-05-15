@@ -7,7 +7,7 @@ class Rook : public Piece{
 	public:
 		Rook(){}
 		Rook(Team team, sf::Vector2i pos, bool enemy=false);
-		bool check_move(sf::Vector2i dest);
+		std::vector<sf::Vector2i> get_available_moves();
 };
 
 #endif

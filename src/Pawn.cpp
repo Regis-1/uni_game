@@ -13,17 +13,10 @@ Pawn::Pawn(Team team, sf::Vector2i pos, bool enemy){
 		this->tex_path = this->tex_path+"pawnY.png";
 }
 
-bool Pawn::check_move(sf::Vector2i dest){
-	sf::Vector2i move_vec = position - dest;
-	if(move_vec.y == 2 && first_move){
-		first_move = false;
-		return true;
-	}
-	else if(move_vec.y == 1){
-		if(first_move)
-			first_move = false;
-		return true;
-	}
-	else
-		return false;
+std::vector<sf::Vector2i> Pawn::get_available_moves(){
+	std::vector<sf::Vector2i> available_moves;
+	if(first_move)
+		available_moves.push_back(this->position + sf::Vector2i(0,-2));
+	available_moves.push_back(this->position + sf::Vector2i(0,-1));
+	return available_moves;
 }

@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+#include <algorithm>
 #include <SFML/Graphics.hpp>
 
 #include "../include/Drawer.hh"

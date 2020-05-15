@@ -13,13 +13,21 @@ Rook::Rook(Team team, sf::Vector2i pos, bool enemy){
 		this->tex_path = this->tex_path+"rookY.png";
 }
 
-bool Rook::check_move(sf::Vector2i dest){
-	sf::Vector2i move_vec = position - dest;
-	move_vec = sf::Vector2i(std::abs(move_vec.x), std::abs(move_vec.y));
-	if(move_vec.x != 0 && move_vec.y == 0)
-		return true;
-	else if(move_vec.x == 0 && move_vec.y != 0)
-		return true;
-	else
-		return false;
+std::vector<sf::Vector2i> Rook::get_available_moves(){
+	std::vector<sf::Vector2i> available_moves;
+	sf::Vector2i versors[4] = {sf::Vector2i(0,-1), sf::Vector2i(1,0), sf::Vector2i(0,1), sf::Vector2i(-1,0)};
+	sf::Vector2i t_vec;
+	int alfa = 1;
+	for(int i=0; i<4; i++){
+		while(true){
+			t_vec = versors[i] * alfa;
+			t_vec = t_vec + this->position;
+			if(t_vec.x<0 || t_vec.x > 7 || t_vec.y<0 || t_vec.y>7)
+				break;
+			available_moves.push_back(t_vec);
+			alfa++;
+		}
+		alfa = 1;
+	}
+	return available_moves;
 }
