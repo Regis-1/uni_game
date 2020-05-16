@@ -29,7 +29,7 @@ bool Piece::get_enemy(){
 	return enemy;
 }
 
-std::vector<sf::Vector2i>Piece::get_available_moves(){
+std::vector<sf::Vector2i>Piece::get_available_moves(std::vector<sf::Vector2i> ofp, std::vector<sf::Vector2i> pfp){
 	std::vector<sf::Vector2i> t = {sf::Vector2i(0,0)};
 	return t;
 }

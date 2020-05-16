@@ -59,3 +59,20 @@ Piece* Faction::get_piece_by_pos(sf::Vector2i pos){
 
 	return p_piece;
 }
+
+std::vector<sf::Vector2i> Faction::get_faction_pos(){
+	std::vector<sf::Vector2i> faction_pos;
+	for(int i=0; i<8; i++){
+		if(i<2){
+			if(i==0){
+				faction_pos.push_back(king.get_position());
+				faction_pos.push_back(queen.get_position());
+			}
+			faction_pos.push_back(bishops[i].get_position());
+			faction_pos.push_back(knights[i].get_position());
+			faction_pos.push_back(rooks[i].get_position());
+		}
+		faction_pos.push_back(pawns[i].get_position());
+	}
+	return faction_pos;
+}

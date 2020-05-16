@@ -36,7 +36,6 @@ class Manager{
 		Manager(int dim_x, int dim_y, std::string title);
 		int run();
 		int close();
-
 };
 
 #endif

@@ -5,6 +5,7 @@
 #include <string>
 #include <cstdlib>
 #include <vector>
+#include <algorithm>
 #include <SFML/Graphics.hpp>
 
 enum Team{
@@ -32,7 +33,7 @@ class Piece{
 		sf::Texture get_texture();
 		std::string get_tex_path();
 		bool get_enemy();
-		virtual std::vector<sf::Vector2i> get_available_moves();
+		virtual std::vector<sf::Vector2i> get_available_moves(std::vector<sf::Vector2i> ofp, std::vector<sf::Vector2i> pfp);
 };
 
 #endif

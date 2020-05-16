@@ -27,6 +27,7 @@ class Faction{
 		Queen get_queen(){return queen;}
 		King get_king(){return king;}
 		Piece *get_piece_by_pos(sf::Vector2i pos);
+		std::vector<sf::Vector2i> get_faction_pos();	
 };
 
 #endif

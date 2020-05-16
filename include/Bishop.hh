@@ -7,7 +7,7 @@ class Bishop : public Piece{
 	public:
 		Bishop(){}
 		Bishop(Team team, sf::Vector2i pos, bool enemy=false);
-		std::vector<sf::Vector2i> get_available_moves();
+		std::vector<sf::Vector2i> get_available_moves(std::vector<sf::Vector2i> ofp, std::vector<sf::Vector2i> pfp);
 };
 
 #endif
