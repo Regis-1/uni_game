@@ -11,23 +11,22 @@
 
 class Faction{
 	private:
-		Pawn pawns[8];
-		Bishop bishops[2];
-		Knight knights[2];
-		Rook rooks[2];
-		Queen queen;
-		King king;
+		Pawn *pawns[8];
+		Bishop *bishops[2];
+		Knight *knights[2];
+		Rook *rooks[2];
+		Queen *queen;
+		King *king;
+
+		void after_move(sf::Vector2i pos, Faction *opponent_faction);
 	public:
 		Faction(){}
 		Faction(Team t, bool enemy=false);
-		Pawn *get_pawns(){return pawns;}
-		Bishop *get_bishops(){return bishops;}
-		Knight *get_knights(){return knights;}
-		Rook *get_rooks(){return rooks;}
-		Queen get_queen(){return queen;}
-		King get_king(){return king;}
 		Piece *get_piece_by_pos(sf::Vector2i pos);
 		std::vector<sf::Vector2i> get_faction_pos();	
+		std::vector<Piece *> get_all_pieces();
+		bool move_piece(Piece *piece, sf::Vector2i pos, Faction *opponent_faction);
+		void kill_piece(int id);
 };
 
 #endif

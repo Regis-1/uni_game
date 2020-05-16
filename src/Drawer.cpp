@@ -54,30 +54,10 @@ void Drawer::draw_piece(sf::RenderWindow *win, Piece *piece){
 }
 
 void Drawer::draw_faction(sf::RenderWindow *win, Faction *f){
-	Piece *p_piece = NULL;
-	Pawn *pawns = f->get_pawns();
-	Bishop *bishops = f->get_bishops();
-	Knight *knights = f->get_knights();
-	Rook *rooks = f->get_rooks();
-	Queen queen = f->get_queen();
-	King king = f->get_king();
-
-	for(int i=0; i<8; i++){
-		p_piece = pawns + i;
-		draw_piece(win, p_piece);
-	}
-	for(int i=0; i<2; i++){
-		p_piece = bishops + i;
-		draw_piece(win, p_piece);
-		p_piece = knights + i;
-		draw_piece(win, p_piece);
-		p_piece = rooks + i;
-		draw_piece(win, p_piece);
-	}
-	p_piece = &queen;
-	draw_piece(win, p_piece);
-	p_piece = &king;
-	draw_piece(win, p_piece);
+	std::vector<Piece *> pieces = f->get_all_pieces();
+	for(int i=0; i<16; i++)
+		if(pieces[i] != NULL)
+			draw_piece(win, pieces[i]);
 }
 
 void Drawer::draw_audioplayer(sf::RenderWindow *win, AudioPlayer *a){

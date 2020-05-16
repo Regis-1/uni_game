@@ -1,11 +1,12 @@
 #include "../include/Queen.hh"
 
-Queen::Queen(Team team, sf::Vector2i pos, bool enemy){
+Queen::Queen(Team team, sf::Vector2i pos, bool enemy, int id){
 	this->position = pos;
 	this->team = team;
 	this->enemy = enemy;
 
 	this->piece.setPosition(sf::Vector2f(1+17*2*pos.x, 1+17*2*pos.y));
+	set_id(id);
 	
 	if(team == Team::blue)
 		this->tex_path = this->tex_path+"queenB.png";

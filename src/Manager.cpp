@@ -7,9 +7,13 @@ Manager::Manager(int dim_x, int dim_y, std::string title){
 	audio_player = AudioPlayer(sf::Vector2i(294,250));
 	size.x = dim_x;
 	size.y = dim_y;
+	this->g_state = GameState::player_move;
 
-	player_faction = Faction(Team::blue);
-	opponent_faction = Faction(Team::yellow, true);
+	player_faction = new Faction(Team::blue);
+	opponent_faction = new Faction(Team::yellow, true);
+
+	std::cout<<std::endl;
+	opponent = Opponent(opponent_faction, player_faction);
 	std::cout<<std::endl;
 }
 
@@ -23,13 +27,18 @@ int Manager::run(){
 			handle_events(event);
 		}
 
+		if(g_state == GameState::opponent_move){
+			opponent.make_move();
+			g_state = GameState::player_move;
+		}
+
 		window.clear();
 		/* visible part */
 		drawer.draw_board(&window);
 		drawer.draw_stats(&window, &stats);
 		drawer.draw_audioplayer(&window, &audio_player);
-		drawer.draw_faction(&window, &player_faction);
-		drawer.draw_faction(&window, &opponent_faction);
+		drawer.draw_faction(&window, player_faction);
+		drawer.draw_faction(&window, opponent_faction);
 		/* visible part */
 		window.display();
 	}
@@ -49,12 +58,14 @@ int Manager::handle_events(sf::Event event){
 	else if(event.type == sf::Event::KeyPressed){
 		if(event.key.code == sf::Keyboard::Escape)
 			window.close();
-		else if(event.key.code == sf::Keyboard::M)
-			std::cout<<"Move command"<<std::endl;
+		else if(event.key.code == sf::Keyboard::M){
+			//std::cout<<"Move command"<<std::endl;
+			player_faction->kill_piece(0);
+		}
 	}
 	else if(event.type == sf::Event::MouseButtonPressed){
 		sf::Vector2i mouse_pos = sf::Mouse::getPosition(window);
-		if(mouse_pos.x < 137*2)
+		if(mouse_pos.x < 137*2 && g_state == GameState::player_move)
 			click_on_board(event);
 		else
 			click_on_menu(event);
@@ -90,22 +101,14 @@ void Manager::click_on_board(sf::Event event){
 	if(event.mouseButton.button == sf::Mouse::Left){
 		if(!second_click){
 			sf::Vector2i tile_pos = get_mouse_tile();
-			p_selected = player_faction.get_piece_by_pos(tile_pos);
+			p_selected = player_faction->get_piece_by_pos(tile_pos);
 			if(p_selected != NULL)
 				second_click = true;
 		}
 		else{
-			std::vector<sf::Vector2i> of_positions = opponent_faction.get_faction_pos();
-			std::vector<sf::Vector2i> pf_positions = player_faction.get_faction_pos();
-			std::vector<sf::Vector2i> a_moves;
 			sf::Vector2i tile_dest = get_mouse_tile();
-			if(p_selected != NULL){
-				a_moves = p_selected->get_available_moves(of_positions, pf_positions);
-				if(std::find(a_moves.begin(), a_moves.end(), tile_dest) != a_moves.end()){
-					p_selected->set_position(tile_dest);
-					p_selected->set_first_move(false);
-				}
-			}
+			if(player_faction->move_piece(p_selected, tile_dest, opponent_faction))
+				g_state = GameState::opponent_move;
 			second_click = false;
 		}
 	}

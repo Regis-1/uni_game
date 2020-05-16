@@ -25,6 +25,7 @@ class Piece{
 		bool first_move = true;
 
 	public:
+		virtual ~Piece();
 		void set_id(int x);
 		void set_position(sf::Vector2i dest);
 		void set_first_move(bool b);
@@ -34,6 +35,7 @@ class Piece{
 		std::string get_tex_path();
 		bool get_enemy();
 		virtual std::vector<sf::Vector2i> get_available_moves(std::vector<sf::Vector2i> ofp, std::vector<sf::Vector2i> pfp);
+		int get_id();
 };
 
 #endif

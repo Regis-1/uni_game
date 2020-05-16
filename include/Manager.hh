@@ -9,7 +9,14 @@
 #include "../include/Drawer.hh"
 #include "../include/AudioPlayer.hh"
 #include "../include/Stats.hh"
-#include "../include/Faction.hh"
+#include "../include/Opponent.hh"
+
+enum GameState{
+	player_move,
+	opponent_move,
+	check,
+	check_mate
+};
 
 class Manager{
 	private:
@@ -17,9 +24,11 @@ class Manager{
 		sf::Vector2i size;
 		sf::RenderWindow window;
 		sf::Event event;
+		GameState g_state;
 
-		Faction player_faction;
-		Faction opponent_faction;
+		Faction *player_faction;
+		Faction *opponent_faction;
+		Opponent opponent;
 
 		Stats stats;
 		AudioPlayer audio_player;
