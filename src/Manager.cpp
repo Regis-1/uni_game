@@ -29,8 +29,10 @@ int Manager::run(){
 
 		if(g_state == GameState::opponent_move){
 			opponent.make_move();
+			stats.update_stats(player_faction, opponent_faction);
 			g_state = GameState::player_move;
 		}
+
 
 		window.clear();
 		/* visible part */
@@ -109,6 +111,7 @@ void Manager::click_on_board(sf::Event event){
 			sf::Vector2i tile_dest = get_mouse_tile();
 			if(player_faction->move_piece(p_selected, tile_dest, opponent_faction))
 				g_state = GameState::opponent_move;
+			stats.update_stats(player_faction, opponent_faction);
 			second_click = false;
 		}
 	}

@@ -37,3 +37,29 @@ int **Stats::get_piece_counter(){
 sf::Color *Stats::get_counter_colors(){
 	return this->counter_colors;
 }
+
+void Stats::update_stats(Faction *player_faction, Faction *opponent_faction){
+	std::vector<Piece *> pieces = opponent_faction->get_all_pieces();
+	int n[5] = {0};
+
+	for(int i=0; i<2; i++){
+		for(int j=0; j<16; j++)
+			if(pieces[j] == NULL){
+				if(j<8)
+					n[0]++;
+				else if(j>=8 && j<10)
+					n[1]++;
+				else if(j>=10 && j<12)
+					n[2]++;
+				else if(j>=12 && j<14)
+					n[3]++;
+				else if(j==14)
+					n[4]++;
+			}
+
+		for(int j=0; j<5; j++)
+			piece_counter[i][j] = n[j];
+		n[0]=0; n[1]=0; n[2]=0; n[3]=0; n[4]=0;
+		pieces = player_faction->get_all_pieces();
+	}
+}

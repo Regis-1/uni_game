@@ -93,11 +93,11 @@ bool Faction::move_piece(Piece *piece, sf::Vector2i pos, Faction *opponent_facti
 void Faction::kill_piece(int id){
 	if(id<8)
 		pawns[id] = NULL;
-	else if(id<10)
+	else if(id>=8 && id<10)
 		bishops[id%8] = NULL;
-	else if(id<12)
+	else if(id>=10 && id<12)
 		knights[id%10] = NULL;
-	else if(id<14)
+	else if(id>=12 && id<14)
 		rooks[id%12] = NULL;
 	else if(id==14)
 		queen = NULL;

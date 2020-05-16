@@ -5,6 +5,8 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 
+#include "../include/Faction.hh"
+
 class Stats{
 	private:
 		std::string players[2];
@@ -19,6 +21,7 @@ class Stats{
 		sf::Vector2f **get_icons_pos();
 		int **get_piece_counter();
 		sf::Color *get_counter_colors();
+		void update_stats(Faction *player_faction, Faction *opponent_faction);
 };
 
 #endif
