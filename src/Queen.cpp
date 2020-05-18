@@ -36,5 +36,4 @@ std::vector<sf::Vector2i> Queen::get_available_moves(std::vector<sf::Vector2i> o
 		alfa = 1;
 	}
 	return available_moves;
-	return available_moves;
 }

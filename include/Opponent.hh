@@ -3,6 +3,11 @@
 
 #include <vector>
 #include <iostream>
+
+//For rand moves...
+#include <ctime>
+#include <cstdlib>
+
 #include <SFML/Graphics.hpp>
 
 #include "../include/Faction.hh"
