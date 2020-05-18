@@ -9,6 +9,15 @@
 #include "../include/Queen.hh"
 #include "../include/King.hh"
 
+enum GameState{
+	player_move,
+	opponent_move,
+	player_check,
+	opponent_check,
+	player_mate,
+	opponent_mate
+};
+
 class Faction{
 	private:
 		Pawn *pawns[8];
@@ -19,13 +28,14 @@ class Faction{
 		King *king;
 
 		void after_move(sf::Vector2i pos, Faction *opponent_faction);
+		GameState is_check(Faction *opponent_faction);
 	public:
 		Faction(){}
 		Faction(Team t, bool enemy=false);
 		Piece *get_piece_by_pos(sf::Vector2i pos);
 		std::vector<sf::Vector2i> get_faction_pos();	
 		std::vector<Piece *> get_all_pieces();
-		bool move_piece(Piece *piece, sf::Vector2i pos, Faction *opponent_faction);
+		GameState move_piece(Piece *piece, sf::Vector2i pos, Faction *opponent_faction);
 		void kill_piece(int id);
 };
 

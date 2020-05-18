@@ -74,20 +74,33 @@ std::vector<Piece *> Faction::get_all_pieces(){
 	return pieces;
 }
 
-bool Faction::move_piece(Piece *piece, sf::Vector2i pos, Faction *opponent_faction){
+GameState Faction::move_piece(Piece *piece, sf::Vector2i pos, Faction *opponent_faction){
 	std::vector<sf::Vector2i> of_positions = opponent_faction->get_faction_pos();
 	std::vector<sf::Vector2i> pf_positions = get_faction_pos();
 	std::vector<sf::Vector2i> a_moves;
+	GameState tmp_state;
 	if(piece != NULL){
 		a_moves = piece->get_available_moves(of_positions, pf_positions);
 		if(std::find(a_moves.begin(), a_moves.end(), pos) != a_moves.end()){
+			sf::Vector2i mem_pos = piece->get_position();
 			piece->set_position(pos);
-			after_move(pos, opponent_faction);
-			piece->set_first_move(false);
-			return true;
+			tmp_state = is_check(opponent_faction);
+			if(tmp_state == GameState::player_check){
+				piece->set_position(mem_pos);
+				return GameState::player_move;
+			}
+			else{
+				after_move(pos, opponent_faction);
+				piece->set_first_move(false);
+			}
 		}
+		else
+			return GameState::player_move;
 	}
-	return false;
+	if(tmp_state == GameState::opponent_check)
+		return GameState::opponent_check;
+	else
+		return GameState::opponent_move;
 }
 
 void Faction::kill_piece(int id){
@@ -111,4 +124,31 @@ void Faction::after_move(sf::Vector2i pos, Faction *opponent_faction){
 	if(piece != NULL){
 		opponent_faction->kill_piece(piece->get_id());
 	}
+}
+
+GameState Faction::is_check(Faction *opponent_faction){
+	std::vector<sf::Vector2i> opponent_pos = opponent_faction->get_faction_pos();
+	std::vector<sf::Vector2i> player_pos = get_faction_pos();
+	std::vector<Piece *> opponent_pieces = opponent_faction->get_all_pieces();
+	std::vector<Piece *> player_pieces = get_all_pieces();
+	std::vector<sf::Vector2i> available_moves;
+
+	for(int i=0; i<16; i++){
+		if(player_pieces[i] != NULL){
+			available_moves = player_pieces[i]->get_available_moves(opponent_pos, player_pos);
+			for(int j=0; j<(int)available_moves.size(); j++)
+				if(available_moves[j] == opponent_pieces[15]->get_position())
+					return GameState::opponent_check;
+		}
+	}
+	for(int i=0; i<16; i++){
+		if(opponent_pieces[i] != NULL){
+			available_moves = opponent_pieces[i]->get_available_moves(player_pos, opponent_pos);
+			for(int j=0; j<(int)available_moves.size(); j++)
+				if(available_moves[j] == player_pieces[15]->get_position())
+					return GameState::player_check;
+		}
+	}
+
+	return GameState::opponent_move;
 }

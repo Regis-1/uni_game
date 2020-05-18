@@ -7,11 +7,12 @@ Opponent::Opponent(Faction *opponent_f, Faction *player_f){
 	std::cout<<"Opponent has been initialized."<<std::endl;
 }
 
-void Opponent::make_move(){
+GameState Opponent::make_move(){
 	std::vector<Piece *> pieces = opponent_faction->get_all_pieces();
 	std::vector<sf::Vector2i> player_faction_pos = player_faction->get_faction_pos();
 	std::vector<sf::Vector2i> opponent_faction_pos = opponent_faction->get_faction_pos();
 	std::vector<sf::Vector2i> available_moves;
+	GameState tmp_state;
 
 	std::srand(std::time(NULL));
 	int r_piece;
@@ -25,6 +26,8 @@ void Opponent::make_move(){
 
 	r_move = rand()%available_moves.size();
 
-	opponent_faction->move_piece(pieces[r_piece], available_moves[r_move], player_faction);
+	tmp_state = opponent_faction->move_piece(pieces[r_piece], available_moves[r_move], player_faction);
 	std::cout<< "Opponent made move..." << std::endl;
+
+	return tmp_state;
 }

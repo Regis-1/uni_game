@@ -11,13 +11,6 @@
 #include "../include/Stats.hh"
 #include "../include/Opponent.hh"
 
-enum GameState{
-	player_move,
-	opponent_move,
-	check,
-	check_mate
-};
-
 class Manager{
 	private:
 		Drawer drawer;

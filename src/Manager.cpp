@@ -28,11 +28,22 @@ int Manager::run(){
 		}
 
 		if(g_state == GameState::opponent_move){
-			opponent.make_move();
+			g_state = opponent.make_move();
 			stats.update_stats(player_faction, opponent_faction);
-			g_state = GameState::player_move;
+			if(g_state == GameState::player_move)
+				g_state = GameState::opponent_move;
+			else if(g_state == GameState::opponent_check)
+				g_state = GameState::player_check;
+			else
+				g_state = GameState::player_move;
 		}
 
+		if(g_state == GameState::player_check){
+			std::cout<<"Player check!"<<std::endl;
+		}
+		else if(g_state == GameState::opponent_check){
+			std::cout<<"Opponent check!"<<std::endl;
+		}
 
 		window.clear();
 		/* visible part */
@@ -109,8 +120,7 @@ void Manager::click_on_board(sf::Event event){
 		}
 		else{
 			sf::Vector2i tile_dest = get_mouse_tile();
-			if(player_faction->move_piece(p_selected, tile_dest, opponent_faction))
-				g_state = GameState::opponent_move;
+			g_state = player_faction->move_piece(p_selected, tile_dest, opponent_faction);
 			stats.update_stats(player_faction, opponent_faction);
 			second_click = false;
 		}
