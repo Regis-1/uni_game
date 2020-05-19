@@ -5,6 +5,11 @@ Pawn::Pawn(Team team, sf::Vector2i pos, bool enemy, int id){
 	this->team = team;
 	this->enemy = enemy;
 
+	if(!enemy)
+		this->cost = 10;
+	else
+		this->cost = -10;
+
 	this->piece.setPosition(sf::Vector2f(1+17*2*pos.x, 1+17*2*pos.y));
 	set_id(id);
 	
@@ -16,6 +21,15 @@ Pawn::Pawn(Team team, sf::Vector2i pos, bool enemy, int id){
 
 std::vector<sf::Vector2i> Pawn::get_available_moves(std::vector<sf::Vector2i> ofp, std::vector<sf::Vector2i> pfp){
 	std::vector<sf::Vector2i> available_moves;
+	sf::Vector2i attack_vec[2];
+	if(!this->enemy){
+		attack_vec[0] = sf::Vector2i(1,-1);
+		attack_vec[1] = sf::Vector2i(-1,-1);
+	}
+	else{
+		attack_vec[0] = sf::Vector2i(1,1);
+		attack_vec[1] = sf::Vector2i(-1,1);
+	}
 	sf::Vector2i t_vec;
 	if(!this->enemy)
 		t_vec = this->position + sf::Vector2i(0,-2);
@@ -36,6 +50,12 @@ std::vector<sf::Vector2i> Pawn::get_available_moves(std::vector<sf::Vector2i> of
 	else
 		if(first_move)
 			available_moves.clear();
+
+	for(int i=0; i<2; i++){
+		t_vec = this->position + attack_vec[i];
+		if(std::find(ofp.begin(), ofp.end(), t_vec) != ofp.end())
+			available_moves.push_back(t_vec);
+	}
 
 	return available_moves;
 }

@@ -7,7 +7,7 @@ SRCDIR=src
 INCDIR=include
 
 TARGET=knight_rider
-CORES=main Manager Opponent Drawer Faction Piece Pawn Rook Bishop Knight Queen King Button Stats AudioPlayer Tree
+CORES=main Manager Opponent Drawer Faction Piece Pawn Rook Bishop Knight Queen King Button Stats AudioPlayer AiTree
 SRCS=$(patsubst %,$(SRCDIR)/%.cpp,$(CORES))
 OBJS=$(patsubst %,$(OBJDIR)/%.o,$(CORES))
 

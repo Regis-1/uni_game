@@ -5,6 +5,11 @@ Knight::Knight(Team team, sf::Vector2i pos, bool enemy, int id){
 	this->team = team;
 	this->enemy = enemy;
 
+	if(!enemy)
+		this->cost = 30;
+	else
+		this->cost = -30;
+
 	this->piece.setPosition(sf::Vector2f(1+17*2*pos.x, 1+17*2*pos.y));
 	set_id(id);
 

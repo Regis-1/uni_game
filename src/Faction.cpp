@@ -82,16 +82,12 @@ GameState Faction::move_piece(Piece *piece, sf::Vector2i pos, Faction *opponent_
 	if(piece != NULL){
 		a_moves = piece->get_available_moves(of_positions, pf_positions);
 		if(std::find(a_moves.begin(), a_moves.end(), pos) != a_moves.end()){
-			sf::Vector2i mem_pos = piece->get_position();
 			piece->set_position(pos);
+			after_move(pos, opponent_faction);
+			piece->set_first_move(false);
 			tmp_state = is_check(opponent_faction);
 			if(tmp_state == GameState::player_check){
-				piece->set_position(mem_pos);
-				return GameState::player_move;
-			}
-			else{
-				after_move(pos, opponent_faction);
-				piece->set_first_move(false);
+				return GameState::player_check;
 			}
 		}
 		else

@@ -30,8 +30,8 @@ int Manager::run(){
 		if(g_state == GameState::opponent_move){
 			g_state = opponent.make_move();
 			stats.update_stats(player_faction, opponent_faction);
-			if(g_state == GameState::player_move)
-				g_state = GameState::opponent_move;
+			if(g_state == GameState::player_check)
+				g_state = GameState::opponent_check;
 			else if(g_state == GameState::opponent_check)
 				g_state = GameState::player_check;
 			else
@@ -72,8 +72,7 @@ int Manager::handle_events(sf::Event event){
 		if(event.key.code == sf::Keyboard::Escape)
 			window.close();
 		else if(event.key.code == sf::Keyboard::M){
-			//std::cout<<"Move command"<<std::endl;
-			player_faction->kill_piece(0);
+			std::cout<<"Move command"<<std::endl;
 		}
 	}
 	else if(event.type == sf::Event::MouseButtonPressed){
