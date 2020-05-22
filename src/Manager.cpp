@@ -1,6 +1,6 @@
 #include "../include/Manager.hh"
 
-Manager::Manager(int dim_x, int dim_y, std::string title){
+Manager::Manager(int dim_x, int dim_y, std::string title, int dep){
 	window.create(sf::VideoMode(dim_x, dim_y), title, sf::Style::Titlebar | sf::Style::Close);
 	drawer = Drawer("Lazer84.ttf");
 	stats = Stats();
@@ -13,7 +13,7 @@ Manager::Manager(int dim_x, int dim_y, std::string title){
 	opponent_faction = new Faction(Team::yellow, true);
 
 	std::cout<<std::endl;
-	opponent = Opponent(opponent_faction, player_faction);
+	opponent = Opponent(opponent_faction, player_faction, dep);
 	std::cout<<std::endl;
 }
 
@@ -27,6 +27,8 @@ int Manager::run(){
 			handle_events(event);
 		}
 
+		refresh_screen();
+
 		if(g_state == GameState::opponent_move){
 			g_state = opponent.make_move();
 			stats.update_stats(player_faction, opponent_faction);
@@ -38,22 +40,8 @@ int Manager::run(){
 				g_state = GameState::player_move;
 		}
 
-		if(g_state == GameState::player_check){
-			std::cout<<"Player check!"<<std::endl;
-		}
-		else if(g_state == GameState::opponent_check){
-			std::cout<<"Opponent check!"<<std::endl;
-		}
+		refresh_screen();
 
-		window.clear();
-		/* visible part */
-		drawer.draw_board(&window);
-		drawer.draw_stats(&window, &stats);
-		drawer.draw_audioplayer(&window, &audio_player);
-		drawer.draw_faction(&window, player_faction);
-		drawer.draw_faction(&window, opponent_faction);
-		/* visible part */
-		window.display();
 	}
 
 	return 0;
@@ -72,7 +60,6 @@ int Manager::handle_events(sf::Event event){
 		if(event.key.code == sf::Keyboard::Escape)
 			window.close();
 		else if(event.key.code == sf::Keyboard::M){
-			std::cout<<"Move command"<<std::endl;
 		}
 	}
 	else if(event.type == sf::Event::MouseButtonPressed){
@@ -164,4 +151,14 @@ void Manager::click_on_menu(sf::Event event){
 			}
 		}
 	}
+}
+
+void Manager::refresh_screen(){
+	window.clear();
+	drawer.draw_board(&window);
+	drawer.draw_stats(&window, &stats);
+	drawer.draw_audioplayer(&window, &audio_player);
+	drawer.draw_faction(&window, player_faction);
+	drawer.draw_faction(&window, opponent_faction);
+	window.display();
 }

@@ -1,7 +1,6 @@
 #include "../include/Piece.hh"
 
 Piece::~Piece(){
-	std::cout<<"Deleted piece!"<<std::endl;
 }
 
 void Piece::set_id(int x){
@@ -40,4 +39,16 @@ std::vector<sf::Vector2i>Piece::get_available_moves(std::vector<sf::Vector2i> of
 
 int Piece::get_id(){
 	return id;
+}
+
+int Piece::get_cost(){
+	return cost;
+}
+
+bool Piece::is_captured(){
+	return captured;
+}
+
+void Piece::capture(){
+	this->captured = true;
 }

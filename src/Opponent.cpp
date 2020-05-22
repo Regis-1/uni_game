@@ -1,33 +1,27 @@
 #include "../include/Opponent.hh"
 
-Opponent::Opponent(Faction *opponent_f, Faction *player_f){
+Opponent::Opponent(Faction *opponent_f, Faction *player_f, int dep){
 	this->player_faction = player_f;
 	this->opponent_faction = opponent_f;
+
+	this->depth = dep;
 
 	std::cout<<"Opponent has been initialized."<<std::endl;
 }
 
 GameState Opponent::make_move(){
-	std::vector<Piece *> pieces = opponent_faction->get_all_pieces();
-	std::vector<sf::Vector2i> player_faction_pos = player_faction->get_faction_pos();
-	std::vector<sf::Vector2i> opponent_faction_pos = opponent_faction->get_faction_pos();
-	std::vector<sf::Vector2i> available_moves;
-	GameState tmp_state;
+	GameState tmp_state = GameState::opponent_move;
+	std::cout<<"Ai is thinking..."<<std::endl;
 
-	std::srand(std::time(NULL));
-	int r_piece;
-	int r_move = 0;
+	ai = new AiTree(depth-1, *opponent_faction, *player_faction);
+	ai->evaluate();
+	sf::Vector2i tmp_vec = ai->get_local_move();
+	Piece *tmp_piece = ai->get_local_piece();
+	Piece *piece = opponent_faction->get_piece_by_id(tmp_piece->get_id());
 
-	while(available_moves.empty()){
-		r_piece = rand()%pieces.size();
-		if(pieces[r_piece] != NULL)
-			available_moves = pieces[r_piece]->get_available_moves(player_faction_pos, opponent_faction_pos);
-	}
+	delete ai;
 
-	r_move = rand()%available_moves.size();
-
-	tmp_state = opponent_faction->move_piece(pieces[r_piece], available_moves[r_move], player_faction);
-	std::cout<< "Opponent made move..." << std::endl;
-
+	tmp_state = opponent_faction->move_piece(piece, tmp_vec, player_faction);
+	std::cout<<"Ai moved."<<std::endl;
 	return tmp_state;
 }

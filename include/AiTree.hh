@@ -3,17 +3,31 @@
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
+#include <SFML/Graphics.hpp>
+
+#include "../include/Faction.hh"
 
 class AiTree{
 	private:
-		AiTree *parent;
-		std::vector<AiTree *> child;
-		int id;
-		//here goes the data
+		bool maximising_player = false;
+		int depth;
+		std::vector<AiTree *> children;
+		
+		bool root = true;
+		sf::Vector2i local_move;
+		Piece *local_piece;
+
+		Faction *opponent_faction;
+		Faction *player_faction;
 	public:
-		AiTree();
-		AiTree(AiTree *parent, int id /*and data here*/);
-		void insert_child(int id);
+		AiTree(){};
+		AiTree(int dep, Faction opponent_f, Faction player_f);
+		AiTree(Piece *piece, sf::Vector2i move, bool maximising, int dep, Faction opponent_f, Faction player_f);
+		void insert_child(Piece *piece, sf::Vector2i move, bool maximising);
+		int evaluate();
+		sf::Vector2i get_local_move(){return local_move;}
+		Piece *get_local_piece(){return local_piece;}
 };
 
 #endif

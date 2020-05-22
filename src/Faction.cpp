@@ -36,6 +36,62 @@ Piece* Faction::get_piece_by_pos(sf::Vector2i pos){
 	return NULL;
 }
 
+Piece *Faction::get_piece_by_id(int id){
+	Piece *piece = NULL;
+	if(id<8)
+		if(!pawns[id]->is_captured())
+			piece = pawns[id];
+	if(id>=8 && id<10)
+		if(!bishops[id%8]->is_captured())
+			piece = bishops[id%8];
+	if(id>=10 && id<12)
+		if(!knights[id%10]->is_captured())
+			piece = knights[id%10];
+	if(id>=12 && id<14)
+		if(!rooks[id%12]->is_captured())
+			piece = rooks[id%12];
+	if(id==14)
+		if(!queen->is_captured())
+			piece = queen;
+	if(id == 15)	
+		if(!king->is_captured())
+			piece = king;
+
+	return piece;
+}
+
+Faction::~Faction(){
+	for(int i=0; i<8; i++){
+		delete pawns[i];
+		if(i<2){
+			delete bishops[i];
+			delete knights[i];
+			delete rooks[i];
+		}
+	}
+	delete queen;
+	delete king;
+}
+
+Faction::Faction(const Faction &F){
+	for(int i=0; i<8; i++){
+		pawns[i] = new Pawn();
+		*(pawns[i]) = F.get_pawn(i);
+	}
+	for(int i=0; i<2; i++){
+		bishops[i] = new Bishop();
+		knights[i] = new Knight();
+		rooks[i] = new Rook();
+		*(bishops[i]) = F.get_bishop(i);
+		*(knights[i]) = F.get_knight(i);
+		*(rooks[i]) = F.get_rook(i);
+	}
+	queen = new Queen();
+	*(queen) = F.get_queen();
+	king = new King();
+	*(king) = F.get_king();
+}
+
 std::vector<sf::Vector2i> Faction::get_faction_pos(){
 	std::vector<sf::Vector2i> faction_pos;
 	std::vector<Piece *> pieces = get_all_pieces();
@@ -52,23 +108,35 @@ std::vector<Piece *> Faction::get_all_pieces(){
 	Piece * p_piece = NULL;
 	for(int i=0; i<8; i++){
 		p_piece = pawns[i];
+		if(p_piece->is_captured())
+			p_piece = NULL;
 		pieces.push_back(p_piece);
 	}
 	for(int i=0; i<2; i++){
 		p_piece = bishops[i];
+		if(p_piece->is_captured())
+			p_piece = NULL;
 		pieces.push_back(p_piece);
 	}
 	for(int i=0; i<2; i++){
 		p_piece = knights[i];
+		if(p_piece->is_captured())
+			p_piece = NULL;
 		pieces.push_back(p_piece);
 	}
 	for(int i=0; i<2; i++){
 		p_piece = rooks[i];
+		if(p_piece->is_captured())
+			p_piece = NULL;
 		pieces.push_back(p_piece);
 	}
 	p_piece = queen;
+	if(p_piece->is_captured())
+		p_piece = NULL;
 	pieces.push_back(p_piece);
 	p_piece = king;
+	if(p_piece->is_captured())
+		p_piece = NULL;
 	pieces.push_back(p_piece);
 
 	return pieces;
@@ -79,6 +147,7 @@ GameState Faction::move_piece(Piece *piece, sf::Vector2i pos, Faction *opponent_
 	std::vector<sf::Vector2i> pf_positions = get_faction_pos();
 	std::vector<sf::Vector2i> a_moves;
 	GameState tmp_state;
+	
 	if(piece != NULL){
 		a_moves = piece->get_available_moves(of_positions, pf_positions);
 		if(std::find(a_moves.begin(), a_moves.end(), pos) != a_moves.end()){
@@ -90,35 +159,82 @@ GameState Faction::move_piece(Piece *piece, sf::Vector2i pos, Faction *opponent_
 				return GameState::player_check;
 			}
 		}
-		else
+		else{
+			std::cout<<"Invalid move!"<<std::endl;
 			return GameState::player_move;
+		}
 	}
+	else{
+	}
+
 	if(tmp_state == GameState::opponent_check)
 		return GameState::opponent_check;
 	else
 		return GameState::opponent_move;
 }
 
-void Faction::kill_piece(int id){
+void Faction::capture_piece(int id){
 	if(id<8)
-		pawns[id] = NULL;
+		pawns[id]->capture();
 	else if(id>=8 && id<10)
-		bishops[id%8] = NULL;
+		bishops[id%8]->capture();
 	else if(id>=10 && id<12)
-		knights[id%10] = NULL;
+		knights[id%10]->capture();
 	else if(id>=12 && id<14)
-		rooks[id%12] = NULL;
+		rooks[id%12]->capture();
 	else if(id==14)
-		queen = NULL;
+		queen->capture();
 	else
-		king = NULL;
+		king->capture();
+}
+
+void Faction::print_padd(){
+	std::cout<<pawns[0]<<std::endl;
+}
+
+int Faction::calculate_value(){
+	std::vector<Piece *> pieces = get_all_pieces();
+	int whole_value = 0;
+	for(int i=0; i<16; i++){
+		if(pieces[i] != NULL){
+			whole_value += pieces[i]->get_cost();
+		}
+	}
+
+	return whole_value;
+}
+
+//Getters of each piece
+Pawn Faction::get_pawn(int i) const{
+	Pawn p = *(pawns[i]);
+	return p;
+}
+Bishop Faction::get_bishop(int i) const{
+	Bishop b = *(bishops[i]);
+	return b;
+}
+Knight Faction::get_knight(int i) const{
+	Knight k = *(knights[i]);
+	return k;
+}
+Rook Faction::get_rook(int i) const{
+	Rook r = *(rooks[i]);
+	return r;
+}
+Queen Faction::get_queen() const{
+	Queen q = *queen;
+	return q;
+}
+King Faction::get_king() const{
+	King k = *king;
+	return k;
 }
 
 /* PRIVATE METHODS */
 void Faction::after_move(sf::Vector2i pos, Faction *opponent_faction){
 	Piece *piece = opponent_faction->get_piece_by_pos(pos);
 	if(piece != NULL){
-		opponent_faction->kill_piece(piece->get_id());
+		opponent_faction->capture_piece(piece->get_id());
 	}
 }
 

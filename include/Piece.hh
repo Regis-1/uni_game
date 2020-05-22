@@ -23,6 +23,7 @@ class Piece{
 		bool enemy;
 		int cost;
 		bool first_move = true;
+		bool captured = false;
 
 	public:
 		virtual ~Piece();
@@ -36,6 +37,9 @@ class Piece{
 		bool get_enemy();
 		virtual std::vector<sf::Vector2i> get_available_moves(std::vector<sf::Vector2i> ofp, std::vector<sf::Vector2i> pfp);
 		int get_id();
+		int get_cost();
+		bool is_captured();
+		void capture();
 };
 
 #endif

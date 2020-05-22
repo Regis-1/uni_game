@@ -10,6 +10,7 @@
 #include "../include/AudioPlayer.hh"
 #include "../include/Stats.hh"
 #include "../include/Opponent.hh"
+#include "../include/AiTree.hh"
 
 class Manager{
 	private:
@@ -34,8 +35,9 @@ class Manager{
 		sf::Vector2i get_mouse_tile();
 		void click_on_board(sf::Event event);
 		void click_on_menu(sf::Event event);
+		void refresh_screen();
 	public:
-		Manager(int dim_x, int dim_y, std::string title);
+		Manager(int dim_x, int dim_y, std::string title, int dep);
 		int run();
 		int close();
 };

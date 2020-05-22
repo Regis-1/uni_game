@@ -32,11 +32,23 @@ class Faction{
 	public:
 		Faction(){}
 		Faction(Team t, bool enemy=false);
+		~Faction();
+		Faction(const Faction &F);
 		Piece *get_piece_by_pos(sf::Vector2i pos);
+		Piece *get_piece_by_id(int id);
 		std::vector<sf::Vector2i> get_faction_pos();	
 		std::vector<Piece *> get_all_pieces();
 		GameState move_piece(Piece *piece, sf::Vector2i pos, Faction *opponent_faction);
-		void kill_piece(int id);
+		void capture_piece(int id);
+		void print_padd();
+		int calculate_value();
+
+		Pawn get_pawn(int i) const;
+		Bishop get_bishop(int i) const;
+		Knight get_knight(int i) const;
+		Rook get_rook(int i) const;
+		Queen get_queen() const;
+		King get_king() const;
 };
 
 #endif
