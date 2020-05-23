@@ -4,12 +4,16 @@ AiTree::AiTree(int dep, Faction opponent_f, Faction player_f){
 	this->depth = dep;
 	this->opponent_faction = new Faction(opponent_f);
 	this->player_faction = new Faction(player_f);
+	this->alpha = -infinity;
+	this->beta = infinity;
 }
 
-AiTree::AiTree(Piece *piece, sf::Vector2i move, bool maximising, int dep, Faction opponent_f, Faction player_f){
+AiTree::AiTree(Piece *piece, sf::Vector2i move, bool maximising, int alp, int bet, int dep, Faction opponent_f, Faction player_f){
 	this->depth = dep;
 	this->opponent_faction = new Faction(opponent_f);
 	this->player_faction = new Faction(player_f);
+	this->alpha = alp;
+	this->beta = bet;
 
 	this->root = false;
 	this->maximising_player = maximising;
@@ -20,9 +24,9 @@ AiTree::AiTree(Piece *piece, sf::Vector2i move, bool maximising, int dep, Factio
 		this->local_piece = player_faction->get_piece_by_id(piece->get_id());
 }
 
-void AiTree::insert_child(Piece *piece, sf::Vector2i move, bool maximising){
+void AiTree::insert_child(Piece *piece, sf::Vector2i move, bool maximising, int alp, int bet){
 	AiTree *child;
-	child = new AiTree(piece, move, maximising, depth-1, *opponent_faction, *player_faction);
+	child = new AiTree(piece, move, maximising, alp, bet, depth-1, *opponent_faction, *player_faction);
 	this->children.push_back(child);
 }
 
@@ -35,13 +39,25 @@ int AiTree::evaluate(){
 	std::vector<int> costs;
 	std::vector<int>::iterator minimax_result;
 	int final_cost = 0;
-	int n_children = 0;
 
+	//START OF MINIMAX ALGORITHM
 	if(!root){
 		if(!maximising_player)
 			tmp_state = player_faction->move_piece(local_piece, local_move, opponent_faction);
 		else
 			tmp_state = opponent_faction->move_piece(local_piece, local_move, player_faction);
+
+		if(tmp_state == GameState::player_check)
+			if(maximising_player)
+				return 1000;
+			else
+				return -1000;
+		else if(tmp_state == GameState::opponent_check){
+			if(maximising_player)
+				return -1000;
+			else
+				return 1000;
+		}
 	}
 
 	if(depth == 0){
@@ -54,34 +70,47 @@ int AiTree::evaluate(){
 	pf_pos = player_faction->get_faction_pos();
 
 	if(maximising_player){
+		final_cost = -infinity;
 		pieces = player_faction->get_all_pieces();
 		for(int i=0; i<16; i++)
 			if(pieces[i] != NULL){
 				available_moves = pieces[i]->get_available_moves(of_pos, pf_pos);
 				for(int j=0; j<(int)available_moves.size(); j++)
-					insert_child(pieces[i], available_moves[j], false);
+					insert_child(pieces[i], available_moves[j], false, alpha, beta);
 			}
 	}
 	else{ /*minimising_player*/
+		final_cost = infinity;
 		pieces = opponent_faction->get_all_pieces();
 		for(int i=0; i<16; i++)
 			if(pieces[i] != NULL){
 				available_moves = pieces[i]->get_available_moves(pf_pos, of_pos);
 				for(int j=0; j<(int)available_moves.size(); j++)
-					insert_child(pieces[i], available_moves[j], true);
+					insert_child(pieces[i], available_moves[j], true, alpha, beta);
 			}
 	}
 
 	for(int i=0; i<(int)children.size(); i++){
 		costs.push_back(children[i]->evaluate());
+
+		if(maximising_player){
+			minimax_result = std::max_element(costs.begin(), costs.end());
+			final_cost = costs[std::distance(costs.begin(), minimax_result)];
+			alpha = std::max(alpha, final_cost);
+			if(alpha >= beta)
+				break;
+		}
+		else{
+			minimax_result = std::min_element(costs.begin(), costs.end());
+			final_cost = costs[std::distance(costs.begin(), minimax_result)];
+			beta = std::min(beta, final_cost);
+			if(alpha >= beta)
+				break;
+		}
 	}
-	if(maximising_player)
-		minimax_result = std::max_element(costs.begin(), costs.end());
-	else
-		minimax_result = std::min_element(costs.begin(), costs.end());
+	//END OF MINIMAX ALGORITHM
 
-	final_cost = costs[std::distance(costs.begin(), minimax_result)];
-
+	//giving the piece and move for opponent
 	if(root){
 		this->local_move = children[std::distance(costs.begin(), minimax_result)]->get_local_move();
 		this->local_piece = children[std::distance(costs.begin(), minimax_result)]->get_local_piece();

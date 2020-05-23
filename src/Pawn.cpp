@@ -45,13 +45,14 @@ std::vector<sf::Vector2i> Pawn::get_available_moves(std::vector<sf::Vector2i> of
 		t_vec = this->position + sf::Vector2i(0,-1);
 	else
 		t_vec = this->position + sf::Vector2i(0,1);
-	if(!(t_vec.y > 7 || t_vec.y < 0))
+	if(!(t_vec.y > 7 || t_vec.y < 0)){
 		if(std::find(ofp.begin(), ofp.end(), t_vec) == ofp.end() && std::find(pfp.begin(), pfp.end(), t_vec) == pfp.end()){
 			available_moves.push_back(t_vec);
 		}
 		else
 			if(first_move)
 				available_moves.clear();
+	}
 
 	for(int i=0; i<2; i++){
 		t_vec = this->position + attack_vec[i];
