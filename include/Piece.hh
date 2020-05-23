@@ -40,6 +40,7 @@ class Piece{
 		int get_cost();
 		bool is_captured();
 		void capture();
+		void revive();
 };
 
 #endif

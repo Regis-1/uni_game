@@ -27,6 +27,11 @@ class Faction{
 		Queen *queen;
 		King *king;
 
+		int id_of_killed;
+		bool killed = false;
+		Piece *moved_piece;
+		sf::Vector2i last_pos;
+
 		void after_move(sf::Vector2i pos, Faction *opponent_faction);
 		GameState is_check(Faction *opponent_faction);
 	public:
@@ -39,9 +44,11 @@ class Faction{
 		std::vector<sf::Vector2i> get_faction_pos();	
 		std::vector<Piece *> get_all_pieces();
 		GameState move_piece(Piece *piece, sf::Vector2i pos, Faction *opponent_faction);
-		void capture_piece(int id);
+		void capture_piece(int id, bool kill=true);
+		void revive_piece(int id);
 		void print_padd();
 		int calculate_value();
+		void undo_move(Faction *opponent_f);
 
 		Pawn get_pawn(int i) const;
 		Bishop get_bishop(int i) const;

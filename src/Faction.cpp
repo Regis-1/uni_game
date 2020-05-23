@@ -151,6 +151,9 @@ GameState Faction::move_piece(Piece *piece, sf::Vector2i pos, Faction *opponent_
 	if(piece != NULL){
 		a_moves = piece->get_available_moves(of_positions, pf_positions);
 		if(std::find(a_moves.begin(), a_moves.end(), pos) != a_moves.end()){
+			last_pos = piece->get_position();
+			moved_piece = new Piece();
+			moved_piece = piece;
 			piece->set_position(pos);
 			after_move(pos, opponent_faction);
 			piece->set_first_move(false);
@@ -164,8 +167,6 @@ GameState Faction::move_piece(Piece *piece, sf::Vector2i pos, Faction *opponent_
 			return GameState::player_move;
 		}
 	}
-	else{
-	}
 
 	if(tmp_state == GameState::opponent_check)
 		return GameState::opponent_check;
@@ -173,19 +174,41 @@ GameState Faction::move_piece(Piece *piece, sf::Vector2i pos, Faction *opponent_
 		return GameState::opponent_move;
 }
 
-void Faction::capture_piece(int id){
+void Faction::capture_piece(int id, bool kill){
 	if(id<8)
-		pawns[id]->capture();
+		if(kill)
+			pawns[id]->capture();
+		else
+			pawns[id]->revive();
 	else if(id>=8 && id<10)
-		bishops[id%8]->capture();
+		if(kill)
+			bishops[id%8]->capture();
+		else
+			bishops[id%8]->revive();
 	else if(id>=10 && id<12)
-		knights[id%10]->capture();
+		if(kill)
+			knights[id%10]->capture();
+		else
+			knights[id%10]->revive();
 	else if(id>=12 && id<14)
-		rooks[id%12]->capture();
+		if(kill)
+			rooks[id%12]->capture();
+		else
+			rooks[id%12]->revive();
 	else if(id==14)
-		queen->capture();
+		if(kill)
+			queen->capture();
+		else
+			queen->revive();
 	else
-		king->capture();
+		if(kill)
+			king->capture();
+		else
+			king->revive();
+}
+
+void Faction::revive_piece(int id){
+	capture_piece(id, false);
 }
 
 void Faction::print_padd(){
@@ -200,8 +223,15 @@ int Faction::calculate_value(){
 			whole_value += pieces[i]->get_cost();
 		}
 	}
-
 	return whole_value;
+}
+
+void Faction::undo_move(Faction *opponent_f){
+	moved_piece->set_position(last_pos);
+	if(killed)
+		opponent_f->revive_piece(id_of_killed);
+	killed = false;
+	moved_piece = NULL;
 }
 
 //Getters of each piece
@@ -234,7 +264,9 @@ King Faction::get_king() const{
 void Faction::after_move(sf::Vector2i pos, Faction *opponent_faction){
 	Piece *piece = opponent_faction->get_piece_by_pos(pos);
 	if(piece != NULL){
-		opponent_faction->capture_piece(piece->get_id());
+		id_of_killed = piece->get_id();
+		opponent_faction->capture_piece(id_of_killed);
+		killed = true;
 	}
 }
 

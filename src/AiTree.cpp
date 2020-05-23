@@ -49,14 +49,14 @@ int AiTree::evaluate(){
 
 		if(tmp_state == GameState::player_check)
 			if(maximising_player)
-				return 1000;
+				return infinity;
 			else
-				return -1000;
+				return -infinity;
 		else if(tmp_state == GameState::opponent_check){
 			if(maximising_player)
-				return -1000;
+				return -infinity;
 			else
-				return 1000;
+				return infinity;
 		}
 	}
 

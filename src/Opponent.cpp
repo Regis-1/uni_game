@@ -13,7 +13,7 @@ GameState Opponent::make_move(){
 	GameState tmp_state = GameState::opponent_move;
 	std::cout<<"Ai is thinking..."<<std::endl;
 
-	ai = new AiTree(depth-1, *opponent_faction, *player_faction);
+	ai = new AiTree(depth, *opponent_faction, *player_faction);
 	ai->evaluate();
 	sf::Vector2i tmp_vec = ai->get_local_move();
 	Piece *tmp_piece = ai->get_local_piece();

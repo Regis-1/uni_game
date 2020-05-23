@@ -52,3 +52,7 @@ bool Piece::is_captured(){
 void Piece::capture(){
 	this->captured = true;
 }
+
+void Piece::revive(){
+	this->captured = false;
+}
