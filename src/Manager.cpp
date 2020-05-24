@@ -29,7 +29,7 @@ int Manager::run(){
 
 		refresh_screen();
 
-		if(g_state == GameState::opponent_move){
+		if(g_state == GameState::opponent_move || g_state == GameState::opponent_check){
 			g_state = opponent.make_move();
 			stats.update_stats(player_faction, opponent_faction);
 			if(g_state == GameState::player_check)
@@ -39,11 +39,6 @@ int Manager::run(){
 			else
 				g_state = GameState::player_move;
 		}
-
-		if(g_state == GameState::player_check)
-			g_state = GameState::player_move;
-		else if(g_state == GameState::opponent_check)
-			g_state = GameState::opponent_move;
 
 		refresh_screen();
 
@@ -69,7 +64,7 @@ int Manager::handle_events(sf::Event event){
 	}
 	else if(event.type == sf::Event::MouseButtonPressed){
 		sf::Vector2i mouse_pos = sf::Mouse::getPosition(window);
-		if(mouse_pos.x < 137*2 && g_state == GameState::player_move)
+		if(mouse_pos.x < 137*2 && (g_state == GameState::player_move||g_state == GameState::player_check))
 			click_on_board(event);
 		else
 			click_on_menu(event);
@@ -112,11 +107,12 @@ void Manager::click_on_board(sf::Event event){
 		else{
 			sf::Vector2i tile_dest = get_mouse_tile();
 			g_state = player_faction->move_piece(p_selected, tile_dest, opponent_faction);
-			std::cout<<g_state<<" State"<<std::endl;
 			if(g_state == GameState::player_check){
 				std::cout<<"CHECK!"<<std::endl;
 				player_faction->undo_move(opponent_faction);
 			}
+			else
+				player_faction->set_killed(false);
 			stats.update_stats(player_faction, opponent_faction);
 			second_click = false;
 		}

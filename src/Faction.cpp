@@ -92,6 +92,10 @@ Faction::Faction(const Faction &F){
 	*(king) = F.get_king();
 }
 
+void Faction::set_killed(bool k){
+	this->killed = k;
+}
+
 std::vector<sf::Vector2i> Faction::get_faction_pos(){
 	std::vector<sf::Vector2i> faction_pos;
 	std::vector<Piece *> pieces = get_all_pieces();

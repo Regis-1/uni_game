@@ -39,6 +39,7 @@ class Faction{
 		Faction(Team t, bool enemy=false);
 		~Faction();
 		Faction(const Faction &F);
+		void set_killed(bool k);
 		Piece *get_piece_by_pos(sf::Vector2i pos);
 		Piece *get_piece_by_id(int id);
 		std::vector<sf::Vector2i> get_faction_pos();	
