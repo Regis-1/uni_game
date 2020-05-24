@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <memory>
 #include <SFML/Graphics.hpp>
 
 #include "../include/Faction.hh"
@@ -12,7 +13,7 @@ class AiTree{
 	private:
 		bool maximising_player = false;
 		int depth;
-		std::vector<AiTree *> children;
+		std::vector<std::unique_ptr<AiTree>> children;
 		
 		bool root = true;
 		sf::Vector2i local_move;
@@ -28,6 +29,7 @@ class AiTree{
 		AiTree(){};
 		AiTree(int dep, Faction opponent_f, Faction player_f);
 		AiTree(Piece *piece, sf::Vector2i move, bool maximising, int alp, int bet, int dep, Faction opponent_f, Faction player_f);
+		~AiTree();
 		void insert_child(Piece *piece, sf::Vector2i move, bool maximising, int alp, int bet);
 		int evaluate();
 		sf::Vector2i get_local_move(){return local_move;}

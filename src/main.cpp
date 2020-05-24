@@ -20,9 +20,11 @@ int main(int argc, char *argv[]){
 		return -1;
 	}
 
-	Manager game(dim_x, dim_y, title, depth);
+	Manager *game = new Manager(dim_x, dim_y, title, depth);
 
-	game.run();
+	game->run();
+
+	delete game;
 
 	std::cout<<"Program finished!"<<std::endl;
 	return 0;

@@ -24,8 +24,8 @@ class Manager{
 		Faction *opponent_faction;
 		Opponent opponent;
 
-		Stats stats;
-		AudioPlayer audio_player;
+		Stats *stats;
+		AudioPlayer *audio_player;
 		bool active_player = false;
 
 		bool second_click = false;
@@ -38,6 +38,7 @@ class Manager{
 		void refresh_screen();
 	public:
 		Manager(int dim_x, int dim_y, std::string title, int dep);
+		~Manager();
 		int run();
 		int close();
 };

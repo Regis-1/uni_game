@@ -10,14 +10,17 @@ Opponent::Opponent(Faction *opponent_f, Faction *player_f, int dep){
 }
 
 GameState Opponent::make_move(){
+	int final_cost = 0;
 	GameState tmp_state = GameState::opponent_move;
 	std::cout<<"Ai is thinking..."<<std::endl;
 
 	ai = new AiTree(depth, *opponent_faction, *player_faction);
-	ai->evaluate();
+	final_cost = ai->evaluate();
 	sf::Vector2i tmp_vec = ai->get_local_move();
 	Piece *tmp_piece = ai->get_local_piece();
 	Piece *piece = opponent_faction->get_piece_by_id(tmp_piece->get_id());
+
+	std::cout<<"Final cost equals: "<<final_cost<<std::endl;
 
 	delete ai;
 

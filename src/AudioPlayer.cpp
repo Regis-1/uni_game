@@ -11,6 +11,10 @@ AudioPlayer::AudioPlayer(sf::Vector2i pos){
 	std::cout<<"Audio player created"<<std::endl;
 }
 
+AudioPlayer::~AudioPlayer(){
+	delete music;
+}
+
 Button *AudioPlayer::get_buttons(){
 	return buttons;
 }

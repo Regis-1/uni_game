@@ -162,9 +162,8 @@ GameState Faction::move_piece(Piece *piece, sf::Vector2i pos, Faction *opponent_
 			after_move(pos, opponent_faction);
 			piece->set_first_move(false);
 			tmp_state = is_check(opponent_faction);
-			if(tmp_state == GameState::player_check){
+			if(tmp_state == GameState::player_check)
 				return GameState::player_check;
-			}
 		}
 		else{
 			std::cout<<"Invalid move!"<<std::endl;
@@ -287,6 +286,7 @@ GameState Faction::is_check(Faction *opponent_faction){
 			for(int j=0; j<(int)available_moves.size(); j++)
 				if(available_moves[j] == opponent_pieces[15]->get_position())
 					return GameState::opponent_check;
+			
 		}
 	}
 	for(int i=0; i<16; i++){

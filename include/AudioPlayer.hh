@@ -18,6 +18,7 @@ class AudioPlayer{
 	public:
 		AudioPlayer(){}
 		AudioPlayer(sf::Vector2i pos);
+		~AudioPlayer();
 		Button *get_buttons();
 		void play();
 		void stop();

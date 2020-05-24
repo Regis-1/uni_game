@@ -3,8 +3,8 @@
 Manager::Manager(int dim_x, int dim_y, std::string title, int dep){
 	window.create(sf::VideoMode(dim_x, dim_y), title, sf::Style::Titlebar | sf::Style::Close);
 	drawer = Drawer("Lazer84.ttf");
-	stats = Stats();
-	audio_player = AudioPlayer(sf::Vector2i(294,250));
+	stats = new Stats();
+	audio_player = new AudioPlayer(sf::Vector2i(294,250));
 	size.x = dim_x;
 	size.y = dim_y;
 	this->g_state = GameState::player_move;
@@ -15,6 +15,14 @@ Manager::Manager(int dim_x, int dim_y, std::string title, int dep){
 	std::cout<<std::endl;
 	opponent = Opponent(opponent_faction, player_faction, dep);
 	std::cout<<std::endl;
+}
+
+Manager::~Manager(){
+	delete audio_player;
+	delete stats;
+	delete opponent_faction;
+	delete player_faction;
+	delete p_selected;
 }
 
 int Manager::run(){
@@ -31,11 +39,13 @@ int Manager::run(){
 
 		if(g_state == GameState::opponent_move || g_state == GameState::opponent_check){
 			g_state = opponent.make_move();
-			stats.update_stats(player_faction, opponent_faction);
+			stats->update_stats(player_faction, opponent_faction);
 			if(g_state == GameState::player_check)
 				g_state = GameState::opponent_check;
 			else if(g_state == GameState::opponent_check)
 				g_state = GameState::player_check;
+			else if(g_state == GameState::opponent_mate)
+				std::cout<<"Check-mate!! Congratulations! You have won!"<<std::endl;
 			else
 				g_state = GameState::player_move;
 		}
@@ -113,7 +123,7 @@ void Manager::click_on_board(sf::Event event){
 			}
 			else
 				player_faction->set_killed(false);
-			stats.update_stats(player_faction, opponent_faction);
+			stats->update_stats(player_faction, opponent_faction);
 			second_click = false;
 		}
 	}
@@ -125,35 +135,35 @@ void Manager::click_on_menu(sf::Event event){
 		if(mouse_pos.x>294 && mouse_pos.x<294+8*2 &&
 			 mouse_pos.y>250 && mouse_pos.y<250+8*2){
 			if(!active_player){
-				audio_player.play();
+				audio_player->play();
 				active_player = true;
 			}
 		}	
 		else if(mouse_pos.x>294+OFFSET*1*2 && mouse_pos.x<294+OFFSET*1*2+8*2 &&
 						mouse_pos.y>250 && mouse_pos.y<250+8*2){
 			if(active_player){
-				audio_player.stop();
+				audio_player->stop();
 				active_player = false;
 			}
 		}
 		else if(mouse_pos.x>294+OFFSET*2*2 && mouse_pos.x<294+OFFSET*2*2+8*2 &&
 						mouse_pos.y>250 && mouse_pos.y<250+8*2){
 			if(!active_player){
-				audio_player.prev();
+				audio_player->prev();
 			}
 			else{
-				audio_player.prev_forced();
-				audio_player.play();
+				audio_player->prev_forced();
+				audio_player->play();
 			}
 		}
 		else if(mouse_pos.x>294+OFFSET*3*2 && mouse_pos.x<294+OFFSET*3*2+8*2 &&
 						mouse_pos.y>250 && mouse_pos.y<250+8*2){
 			if(!active_player){
-				audio_player.next();
+				audio_player->next();
 			}
 			else{
-				audio_player.next_forced();
-				audio_player.play();
+				audio_player->next_forced();
+				audio_player->play();
 			}
 		}
 	}
@@ -162,8 +172,8 @@ void Manager::click_on_menu(sf::Event event){
 void Manager::refresh_screen(){
 	window.clear();
 	drawer.draw_board(&window);
-	drawer.draw_stats(&window, &stats);
-	drawer.draw_audioplayer(&window, &audio_player);
+	drawer.draw_stats(&window, stats);
+	drawer.draw_audioplayer(&window, audio_player);
 	drawer.draw_faction(&window, player_faction);
 	drawer.draw_faction(&window, opponent_faction);
 	window.display();

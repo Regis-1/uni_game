@@ -14,8 +14,12 @@ Stats::Stats(){
 				icons_pos[i][j] = sf::Vector2f(295+16*j, 205);
 		}
 	}
-
 	std::cout<<"Stats created!"<<std::endl;
+}
+
+Stats::~Stats(){
+	delete [] piece_counter;
+	delete [] icons_pos;
 }
 
 std::string *Stats::get_players(){

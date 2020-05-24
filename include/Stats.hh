@@ -16,6 +16,7 @@ class Stats{
 		sf::Vector2f **icons_pos = new sf::Vector2f* [2];
 	public:
 		Stats();
+		~Stats();
 		std::string *get_players();
 		std::string *get_icons_names();
 		sf::Vector2f **get_icons_pos();

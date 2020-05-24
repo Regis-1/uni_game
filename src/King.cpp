@@ -6,9 +6,9 @@ King::King(Team team, sf::Vector2i pos, bool enemy, int id){
 	this->enemy = enemy;
 
 	if(!enemy)
-		this->cost = 999;
+		this->cost = 900;
 	else
-		this->cost = -999;
+		this->cost = -900;
 
 	this->piece.setPosition(sf::Vector2f(1+17*2*pos.x, 1+17*2*pos.y));
 	set_id(id);

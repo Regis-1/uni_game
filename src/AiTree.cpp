@@ -24,10 +24,16 @@ AiTree::AiTree(Piece *piece, sf::Vector2i move, bool maximising, int alp, int be
 		this->local_piece = player_faction->get_piece_by_id(piece->get_id());
 }
 
+AiTree::~AiTree(){
+	if(root){
+		delete opponent_faction;
+		delete player_faction;
+		delete local_piece;
+	}
+}
+
 void AiTree::insert_child(Piece *piece, sf::Vector2i move, bool maximising, int alp, int bet){
-	AiTree *child;
-	child = new AiTree(piece, move, maximising, alp, bet, depth-1, *opponent_faction, *player_faction);
-	this->children.push_back(child);
+	this->children.push_back(std::make_unique<AiTree>(piece, move, maximising, alp, bet, depth-1, *opponent_faction, *player_faction));
 }
 
 int AiTree::evaluate(){
@@ -47,17 +53,15 @@ int AiTree::evaluate(){
 		else
 			tmp_state = opponent_faction->move_piece(local_piece, local_move, player_faction);
 
-		if(tmp_state == GameState::player_check)
-			if(maximising_player)
-				return infinity;
-			else
-				return -infinity;
-		else if(tmp_state == GameState::opponent_check){
-			if(maximising_player)
-				return -infinity;
-			else
-				return infinity;
+		if(tmp_state==GameState::opponent_check){
+			final_cost = (maximising_player)?-900:900;
+			return final_cost;
 		}
+		else if(tmp_state==GameState::player_check){
+			final_cost = (maximising_player)?900:-900;
+			return final_cost;
+		}
+
 	}
 
 	if(depth == 0){
