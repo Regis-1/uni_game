@@ -73,6 +73,7 @@ Faction::~Faction(){
 	delete king;
 }
 
+//FACTION'S COPY CONSTRUCTOR
 Faction::Faction(const Faction &F){
 	for(int i=0; i<8; i++){
 		pawns[i] = new Pawn();
@@ -107,6 +108,7 @@ std::vector<sf::Vector2i> Faction::get_faction_pos(){
 	return faction_pos;
 }
 
+//GETTING ALL THE PIECES IN FORM OF SIMPLE VECTOR OF POINTERS
 std::vector<Piece *> Faction::get_all_pieces(){
 	std::vector<Piece *> pieces;
 	Piece * p_piece = NULL;
@@ -146,6 +148,7 @@ std::vector<Piece *> Faction::get_all_pieces(){
 	return pieces;
 }
 
+//MOVING SELECTED PIECE AND CHECKING IF THE MOVE CAUSE CHECK
 GameState Faction::move_piece(Piece *piece, sf::Vector2i pos, Faction *opponent_faction){
 	std::vector<sf::Vector2i> of_positions = opponent_faction->get_faction_pos();
 	std::vector<sf::Vector2i> pf_positions = get_faction_pos();
@@ -177,6 +180,7 @@ GameState Faction::move_piece(Piece *piece, sf::Vector2i pos, Faction *opponent_
 		return GameState::opponent_move;
 }
 
+//HIDING PIECE FROM VIEW
 void Faction::capture_piece(int id, bool kill){
 	if(id<8)
 		if(kill)
@@ -210,6 +214,7 @@ void Faction::capture_piece(int id, bool kill){
 			king->revive();
 }
 
+//MAKE PIECE GO BACK TO THE BOARD (IN CASE OF CHECK MOVE)
 void Faction::revive_piece(int id){
 	capture_piece(id, false);
 }
@@ -218,6 +223,8 @@ void Faction::print_padd(){
 	std::cout<<pawns[0]<<std::endl;
 }
 
+//CALCULATING THE WHOLE VALUE OF BOARD IN GIVEN STATE
+//[BASED ONLY ON PIECES VALUES]
 int Faction::calculate_value(){
 	std::vector<Piece *> pieces = get_all_pieces();
 	int whole_value = 0;
@@ -229,6 +236,8 @@ int Faction::calculate_value(){
 	return whole_value;
 }
 
+//UNDOING MOVE IF IT CAUSES THE CHECK OF THE PLAYER
+//[IN CASE OF KING'S SUICIDAL MOVE]
 void Faction::undo_move(Faction *opponent_f){
 	moved_piece->set_position(last_pos);
 	if(killed)
@@ -273,6 +282,7 @@ void Faction::after_move(sf::Vector2i pos, Faction *opponent_faction){
 	}
 }
 
+//CHECKING IF MOVED PIECE CAUSED CHECK AND FOR WHOM IS THIS CHECK
 GameState Faction::is_check(Faction *opponent_faction){
 	std::vector<sf::Vector2i> opponent_pos = opponent_faction->get_faction_pos();
 	std::vector<sf::Vector2i> player_pos = get_faction_pos();

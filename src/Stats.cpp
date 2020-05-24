@@ -42,6 +42,7 @@ sf::Color *Stats::get_counter_colors(){
 	return this->counter_colors;
 }
 
+//UPDATING THE STATS [CAPTURED PIECES COUNTERS ETC]
 void Stats::update_stats(Faction *player_faction, Faction *opponent_faction){
 	std::vector<Piece *> pieces = opponent_faction->get_all_pieces();
 	int n[5] = {0};

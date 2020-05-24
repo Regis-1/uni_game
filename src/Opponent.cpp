@@ -9,6 +9,7 @@ Opponent::Opponent(Faction *opponent_f, Faction *player_f, int dep){
 	std::cout<<"Opponent has been initialized."<<std::endl;
 }
 
+//MAKING MINIMAX TREE AND THEN EVALUATING WHAT MOVE TO USE
 GameState Opponent::make_move(){
 	int final_cost = 0;
 	GameState tmp_state = GameState::opponent_move;

@@ -19,6 +19,7 @@ class AiTree{
 		sf::Vector2i local_move;
 		Piece *local_piece;
 
+		//PARAMETERS FOR ALPHA BETA PRUNING
 		int alpha;
 		int beta;
 		const int infinity = 2147483647;

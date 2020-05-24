@@ -36,6 +36,7 @@ void AiTree::insert_child(Piece *piece, sf::Vector2i move, bool maximising, int 
 	this->children.push_back(std::make_unique<AiTree>(piece, move, maximising, alp, bet, depth-1, *opponent_faction, *player_faction));
 }
 
+// >>MAIN MINIMAX ALGORITHM FUNCTION<< //
 int AiTree::evaluate(){
 	GameState tmp_state;
 	std::vector<sf::Vector2i> available_moves;
@@ -73,6 +74,7 @@ int AiTree::evaluate(){
 	of_pos = opponent_faction->get_faction_pos();
 	pf_pos = player_faction->get_faction_pos();
 
+	//INSERTING CHILDREN FOR PREDICTING NEXT MOVE
 	if(maximising_player){
 		final_cost = -infinity;
 		pieces = player_faction->get_all_pieces();

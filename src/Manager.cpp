@@ -3,20 +3,20 @@ using namespace std::chrono_literals;
 
 Manager::Manager(int dim_x, int dim_y, std::string title, int dep){
 	drawer = Drawer("Lazer84.ttf");
-	std::this_thread::sleep_for(1s);
+	std::this_thread::sleep_for(50ms);
 	stats = new Stats();
-	std::this_thread::sleep_for(1s);
+	std::this_thread::sleep_for(50ms);
 	audio_player = new AudioPlayer(sf::Vector2i(294,250));
 	size.x = dim_x;
 	size.y = dim_y;
 	this->g_state = GameState::player_move;
 
-	std::this_thread::sleep_for(1s);
+	std::this_thread::sleep_for(50ms);
 	player_faction = new Faction(Team::blue);
-	std::this_thread::sleep_for(1s);
+	std::this_thread::sleep_for(50ms);
 	opponent_faction = new Faction(Team::yellow, true);
 
-	std::this_thread::sleep_for(1s);
+	std::this_thread::sleep_for(50ms);
 	opponent = Opponent(opponent_faction, player_faction, dep);
 	std::cout<<std::endl;
 
@@ -71,14 +71,13 @@ int Manager::close(){
 }
 
 /* PRIVATE METHODS */
+//EVENTS HANDLING (MOUSE PRESSING, CLOSE REQUEST ETC.)
 int Manager::handle_events(sf::Event event){
 	if(event.type == sf::Event::Closed)
 		window.close();
 	else if(event.type == sf::Event::KeyPressed){
 		if(event.key.code == sf::Keyboard::Escape)
 			window.close();
-		else if(event.key.code == sf::Keyboard::M){
-		}
 	}
 	else if(event.type == sf::Event::MouseButtonPressed){
 		sf::Vector2i mouse_pos = sf::Mouse::getPosition(window);
@@ -91,6 +90,7 @@ int Manager::handle_events(sf::Event event){
 	return 0;
 }
 
+//TRANSFORMING MOUSE POSITION FROM FLOAT VARIABLE TO ABSTRACT BOARD POSITION
 sf::Vector2i Manager::get_mouse_tile(){
 	sf::Vector2i tile;
 	sf::Vector2i l_pos = sf::Mouse::getPosition(window);
@@ -114,6 +114,7 @@ sf::Vector2i Manager::get_mouse_tile(){
 	return tile;
 }
 
+//HANDLING CLICKING ON BOARD SIDE
 void Manager::click_on_board(sf::Event event){
 	if(event.mouseButton.button == sf::Mouse::Left){
 		if(!second_click){
@@ -138,6 +139,7 @@ void Manager::click_on_board(sf::Event event){
 	}
 }
 
+//HANDLING CLICKING ON MENU SIDE
 void Manager::click_on_menu(sf::Event event){
 	if(event.mouseButton.button == sf::Mouse::Left){
 		sf::Vector2i mouse_pos = sf::Mouse::getPosition(window);
