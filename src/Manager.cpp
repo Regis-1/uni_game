@@ -1,20 +1,28 @@
 #include "../include/Manager.hh"
+using namespace std::chrono_literals;
 
 Manager::Manager(int dim_x, int dim_y, std::string title, int dep){
-	window.create(sf::VideoMode(dim_x, dim_y), title, sf::Style::Titlebar | sf::Style::Close);
 	drawer = Drawer("Lazer84.ttf");
+	std::this_thread::sleep_for(1s);
 	stats = new Stats();
+	std::this_thread::sleep_for(1s);
 	audio_player = new AudioPlayer(sf::Vector2i(294,250));
 	size.x = dim_x;
 	size.y = dim_y;
 	this->g_state = GameState::player_move;
 
+	std::this_thread::sleep_for(1s);
 	player_faction = new Faction(Team::blue);
+	std::this_thread::sleep_for(1s);
 	opponent_faction = new Faction(Team::yellow, true);
 
-	std::cout<<std::endl;
+	std::this_thread::sleep_for(1s);
 	opponent = Opponent(opponent_faction, player_faction, dep);
 	std::cout<<std::endl;
+
+	title_rollup();
+
+	window.create(sf::VideoMode(dim_x, dim_y), title, sf::Style::Titlebar | sf::Style::Close);
 }
 
 Manager::~Manager(){
@@ -45,7 +53,7 @@ int Manager::run(){
 			else if(g_state == GameState::opponent_check)
 				g_state = GameState::player_check;
 			else if(g_state == GameState::opponent_mate)
-				std::cout<<"Check-mate!! Congratulations! You have won!"<<std::endl;
+				std::cout<<"Check-mate! You have won!"<<std::endl;
 			else
 				g_state = GameState::player_move;
 		}
@@ -124,6 +132,7 @@ void Manager::click_on_board(sf::Event event){
 			else
 				player_faction->set_killed(false);
 			stats->update_stats(player_faction, opponent_faction);
+			opponent.off_distress();
 			second_click = false;
 		}
 	}
@@ -177,4 +186,28 @@ void Manager::refresh_screen(){
 	drawer.draw_faction(&window, player_faction);
 	drawer.draw_faction(&window, opponent_faction);
 	window.display();
+}
+
+void Manager::title_rollup(){
+	std::this_thread::sleep_for(2s);
+
+	std::string welcome_text =R"(
+       Jakub Dudziński [248928] presents...)";
+	std::cout<<welcome_text<<std::endl;
+	std::this_thread::sleep_for(1s);
+	welcome_text = R"(   __         _      __   __         _    __)";
+	std::cout<<welcome_text<<std::endl;
+	std::this_thread::sleep_for(1s);
+	welcome_text = R"(  / /__ ___  (_)__ _/ /  / /_   ____(_)__/ /__ ____)";
+	std::cout<<welcome_text<<std::endl;
+	std::this_thread::sleep_for(1s);
+	welcome_text = R"( /  '_// _ \/ / _ `/ _ \/ __/  / __/ / _  / -_) __/)";
+	std::cout<<welcome_text<<std::endl;
+	std::this_thread::sleep_for(1s);
+	welcome_text = R"(/_/\_\/_//_/_/\_, /_//_/\__/  /_/ /_/\_,_/\__/_/)";
+	std::cout<<welcome_text<<std::endl;
+	std::this_thread::sleep_for(1s);
+	welcome_text = R"(             /___/)";
+	std::cout<<welcome_text<<std::endl<<std::endl;
+	std::this_thread::sleep_for(3s);
 }

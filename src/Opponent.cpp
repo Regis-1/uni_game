@@ -20,9 +20,15 @@ GameState Opponent::make_move(){
 	Piece *tmp_piece = ai->get_local_piece();
 	Piece *piece = opponent_faction->get_piece_by_id(tmp_piece->get_id());
 
-	std::cout<<"Final cost equals: "<<final_cost<<std::endl;
-
 	delete ai;
+
+	if(final_cost==900 && !distress)
+		this->distress = true;
+	else if(final_cost==900 && distress){
+		return GameState::opponent_mate;
+	}
+	else
+		this->distress = false;
 
 	tmp_state = opponent_faction->move_piece(piece, tmp_vec, player_faction);
 	std::cout<<"Ai moved."<<std::endl;

@@ -16,6 +16,8 @@ class Opponent{
 		Faction *player_faction;
 		Faction *opponent_faction;
 
+		bool distress = false;
+
 		AiTree *ai;
 		int depth;
 
@@ -23,6 +25,7 @@ class Opponent{
 		Opponent(){}
 		Opponent(Faction *opponent_f, Faction *player_f, int dep=2);
 		GameState make_move();
+		void off_distress(){this->distress = false;}
 };
 
 #endif

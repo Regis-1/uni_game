@@ -4,6 +4,8 @@
 #include <string>
 #include <iostream>
 #include <algorithm>
+#include <chrono>
+#include <thread>
 #include <SFML/Graphics.hpp>
 
 #include "../include/Drawer.hh"
@@ -36,6 +38,7 @@ class Manager{
 		void click_on_board(sf::Event event);
 		void click_on_menu(sf::Event event);
 		void refresh_screen();
+		void title_rollup();
 	public:
 		Manager(int dim_x, int dim_y, std::string title, int dep);
 		~Manager();
